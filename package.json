@@ -1,0 +1,22 @@
+{
+  "name": "nsg-cloud-storage-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.570.0",
+    "serverless": "^1.57.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.nordstrom.com:nsg/network-mgmt-stack.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
