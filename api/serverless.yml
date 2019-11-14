@@ -67,7 +67,6 @@ resources:
     NSGLambdaRole:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: ${self:service}-${self:provider.stage}-NSGLambdaRole
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -79,18 +78,12 @@ resources:
         Policies:
           - PolicyName: ${self:service}-${self:provider.stage}-NSGLambdaPolicy
             PolicyDocument:
-              Version: '2017-10-17'
+              Version: '2012-10-17'
               Statement:
                 - Effect: Allow
-                  Action:
-                    - dynamodb:PutItem
-            #       - dynamodb:Query
-            #       - dynamodb:Scan
-            #       - dynamodb:GetItem
-            #       - dynamodb:UpdateItem
-            #       - dynamodb:DeleteItem
-                  Resource: ${self:custom.ACLTableARN}
-
+                  Action: dynamodb:PutItem
+                  Resource: !ImportValue ACLTableARN
+        RoleName: ${self:service}-${self:provider.stage}-NSGLambdaRole
         ManagedPolicyArns:
           - Fn::ImportValue: fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
 
