@@ -1,0 +1,70 @@
+service: nsg-acl
+
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+provider:
+  name: aws
+  region: us-west-2
+  # stage: ${opt:stage, nonprod}
+  runtime: nodejs10.x
+  environment:
+    DYNAMODB_TABLE: !ImportValue ACLTableName
+  # iamRoleStatements:
+  #   - Effect: Allow
+  #     Action:
+  #       - dynamodb:Query
+  #       - dynamodb:Scan
+  #       - dynamodb:GetItem
+  #       - dynamodb:PutItem
+  #       - dynamodb:UpdateItem
+  #       - dynamodb:DeleteItem
+  #     Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+custom:
+  webpack:
+    webpackConfig: webpack.config.js
+    includeModules: false
+
+functions:
+  create:
+    handler: acl/create.create
+    events:
+      - http:
+          path: create
+          method: post
+          cors: true
+
+  list:
+    handler: acl/list.list
+    events:
+      - http:
+          path: list
+          method: get
+          cors: true
+
+#   get:
+#     handler: todos/get.get
+#     events:
+#       - http:
+#           path: todos/{id}
+#           method: get
+#           cors: true
+
+#   update:
+#     handler: todos/update.update
+#     events:
+#       - http:
+#           path: todos/{id}
+#           method: put
+#           cors: true
+
+#   delete:
+#     handler: todos/delete.delete
+#     events:
+#       - http:
+#           path: todos/{id}
+#           method: delete
+#           cors: true
+
+plugins:
+  - serverless-webpack
