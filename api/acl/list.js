@@ -25,6 +25,4 @@ exports.create = async(event, context) => {
 			body: 'Couldn\'t create item',
 		}
 	}
-
-
 }

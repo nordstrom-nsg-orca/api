@@ -20,7 +20,7 @@
     "deploy-storage": "cd storage && npm run sls-deploy",
     "remove-api": "cd api && npm run sls-remove",
     "remove-storage": "cd storage && npm run sls-remove",
-    "lambda": "cd api && DYNAMODB_TABLE=nsg-acl-storage-dev aws-okta exec nonprod -- npx sls invoke local"
+    "lambda": "cd api && aws-okta exec nonprod -- npx sls invoke local --env DYNAMODB_TABLE='nsg-acl-storage-dev'"
   },
   "repository": {
     "type": "git",

@@ -5,29 +5,25 @@ frameworkVersion: ">=1.1.0 <2.0.0"
 provider:
   name: aws
   region: us-west-2
-  # stage: ${opt:stage, nonprod}
+  stage: ${opt:stage, 'nonprod'}
   runtime: nodejs10.x
   environment:
-    DYNAMODB_TABLE: !ImportValue ACLTableName
-  # iamRoleStatements:
-  #   - Effect: Allow
-  #     Action:
-  #       - dynamodb:Query
-  #       - dynamodb:Scan
-  #       - dynamodb:GetItem
-  #       - dynamodb:PutItem
-  #       - dynamodb:UpdateItem
-  #       - dynamodb:DeleteItem
-  #     Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+    DYNAMODB_TABLE: ${self:custom.ACLTableName}
 
 custom:
+  ACLTableName: !ImportValue ACLTableName
+  ACLTableARN: !ImportValue ACLTableARN
   webpack:
     webpackConfig: webpack.config.js
     includeModules: false
 
+package:
+  individually: true
+
 functions:
   create:
     handler: acl/create.create
+    role: NSGLambdaRole
     events:
       - http:
           path: create
@@ -36,6 +32,7 @@ functions:
 
   list:
     handler: acl/list.list
+    role: NSGLambdaRole
     events:
       - http:
           path: list
@@ -62,9 +59,41 @@ functions:
 #     handler: todos/delete.delete
 #     events:
 #       - http:
-#           path: todos/{id}
 #           method: delete
 #           cors: true
+
+resources:
+  Resources:
+    NSGLambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${self:service}-${self:provider.stage}-NSGLambdaRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: sts:AssumeRole
+              Principal:
+                Service: lambda.amazonaws.com
+        Path: /
+        Policies:
+          - PolicyName: ${self:service}-${self:provider.stage}-NSGLambdaPolicy
+            PolicyDocument:
+              Version: '2017-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - dynamodb:PutItem
+            #       - dynamodb:Query
+            #       - dynamodb:Scan
+            #       - dynamodb:GetItem
+            #       - dynamodb:UpdateItem
+            #       - dynamodb:DeleteItem
+                  Resource: ${self:custom.ACLTableARN}
+
+        ManagedPolicyArns:
+          - Fn::ImportValue: fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
+
 
 plugins:
   - serverless-webpack

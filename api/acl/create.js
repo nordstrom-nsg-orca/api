@@ -6,6 +6,7 @@ const { DynamoDB } = require('aws-sdk');
 const dynamoDb = new DynamoDB();
 
 exports.create = async(event, context) => {
+	
 	const params = {
 		TableName: process.env.DYNAMODB_TABLE,
 		Item: {
