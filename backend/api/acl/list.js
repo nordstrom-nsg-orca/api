@@ -1,18 +1,19 @@
 'use strict';
 
 const uuid = require('uuid');
-const AWS = require('aws-sdk');
+const { DynamoDB } = require('aws-sdk');
 
-const dynamoDb = new AWS.DynamoDB();
+const dynamoDb = new DynamoDB.DocumentClient();
 
-exports.create = async(event, context) => {
-	const params = {
-		TableName: process.env.DYNAMODB_TABLE
-	};
+exports.list = async(event, context) => {
+	const params = { TableName: process.env.DYNAMODB_TABLE };
 	
 	try {
 		const res = await dynamoDb.scan(params).promise();
-		console.log(JSON.stringify(res));
+		
+		// res.Items.forEach(element => {
+		// 	console.log(JSON.parse(element.ips))
+		// })
 		return {
 			statusCode: res.statusCode,
 			body: JSON.stringify(res.Items)

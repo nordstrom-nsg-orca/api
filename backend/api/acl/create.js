@@ -3,22 +3,22 @@
 const uuid = require('uuid');
 const { DynamoDB } = require('aws-sdk');
 
-const dynamoDb = new DynamoDB();
+const dynamoDb = new DynamoDB.DocumentClient();
 
 exports.create = async(event, context) => {
-	
+
 	const params = {
 		TableName: process.env.DYNAMODB_TABLE,
 		Item: {
-			'id': { S: uuid.v1() },
-			'prefix-list': { S: 'HELLLLLO' }
+			'id': uuid.v1(),
+			'prefix-list': event['prefix-list'],
+			'ips': JSON.stringify(event.ips)
 		}
 	};
-	
+
 	try {
-		const res = await dynamoDb.putItem(params).promise();
-		console.log(JSON.stringify(res));
-		return res;
+		const res = await dynamoDb.put(params).promise();
+		return { statusCode: 200 };
 	} catch(err) {
 		console.error(err)
 		return {

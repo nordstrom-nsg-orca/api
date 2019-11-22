@@ -13,6 +13,7 @@ provider:
 custom:
   ACLTableName: !ImportValue ACLTableName
   ACLTableARN: !ImportValue ACLTableARN
+  TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
   webpack:
     webpackConfig: webpack.config.js
     includeModules: false
@@ -23,7 +24,7 @@ package:
 functions:
   create:
     handler: acl/create.create
-    role: NSGLambdaRole
+    role: ACLDynamoDBWrite
     events:
       - http:
           path: create
@@ -32,7 +33,7 @@ functions:
 
   list:
     handler: acl/list.list
-    role: NSGLambdaRole
+    role: ACLDynamoDBScan
     events:
       - http:
           path: list
@@ -64,7 +65,7 @@ functions:
 
 resources:
   Resources:
-    NSGLambdaRole:
+    ACLDynamoDBWrite:
       Type: AWS::IAM::Role
       Properties:
         AssumeRolePolicyDocument:
@@ -76,16 +77,39 @@ resources:
                 Service: lambda.amazonaws.com
         Path: /
         Policies:
-          - PolicyName: ${self:service}-${self:provider.stage}-NSGLambdaPolicy
+          - PolicyName: ${self:service}-${self:provider.stage}-ACLDynamoDBWritePolicy
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
                 - Effect: Allow
                   Action: dynamodb:PutItem
-                  Resource: !ImportValue ACLTableARN
-        RoleName: ${self:service}-${self:provider.stage}-NSGLambdaRole
+                  Resource: ${self:custom.ACLTableARN}
+        RoleName: ${self:service}-${self:provider.stage}-ACLDynamoDBWrite
         ManagedPolicyArns:
-          - Fn::ImportValue: fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
+          - ${self:custom.TeamManagedPolicy}
+
+    ACLDynamoDBScan:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: sts:AssumeRole
+              Principal:
+                Service: lambda.amazonaws.com
+        Path: /
+        Policies:
+          - PolicyName: ${self:service}-${self:provider.stage}-ACLDynamoDBScanPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action: dynamodb:Scan
+                  Resource: ${self:custom.ACLTableARN}
+        RoleName: ${self:service}-${self:provider.stage}-ACLDynamoDBScan
+        ManagedPolicyArns:
+          - ${self:custom.TeamManagedPolicy}
 
 
 plugins:

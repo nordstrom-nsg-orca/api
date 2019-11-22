@@ -1,0 +1,21 @@
+{
+	"prefix-list": "REMOTE_MANAGEMENT2",
+	"ips": [
+		{
+			"ip": "10.10.10.10/23",
+			"allowed": "SSH"
+		},
+		{
+			"ip": "10.10.10.11/23",
+			"allowed": "SSH"
+		},
+		{
+			"ip": "10.10.10.12/23",
+			"allowed": "SNMP"
+		},
+		{
+			"ip": "10.10.10.13/23",
+			"allowed": "SSH"
+		}
+	]
+}
