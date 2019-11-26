@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
-import Toolbar from '@material-ui/core/Toolbar';
+
+
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
@@ -17,7 +19,6 @@ import TableRow from '@material-ui/core/TableRow';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
-import Divider from '@material-ui/core/Divider';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -31,31 +32,35 @@ class ACL extends React.Component {
     super(props);
   }
  
-  handleChange = (e) => {
-    console.log('hey');
-  }
 
-  addACL = () => {
-    console.log('addacl');
-    this.props.acl['ips'].push({'ip': 'IP', 'allowed': 'allowed'});
-    console.log(this.props.acl['ips']);
+  renderDeleteButton(classes,aclId) {
+    if (this.props.locked) return;
+    return (
+      <IconButton size="small"
+                  className={classes.deleteButton}
+                  onClick={this.props.aclHandler.bind(this,'delete',this.props.index,aclId)}>
+        <CloseIcon style={{fontSize: '18px'}}/>
+      </IconButton>
+    );
   }
 
   render() {
-
     const { classes } = this.props;
+    const keys = ['ip', 'allowed', 'desc'];
 
-    var addButton;
+    var addButton, deleteButton;
     if (!this.props.locked) {
-      addButton = <IconButton size="small" className={classes.addButton} onClick={this.props.addACL}>
+      addButton = <IconButton size="small"
+                    className={classes.addButton}
+                    onClick={this.props.aclHandler.bind(this,'add',this.props.index,null)}>
                     <AddIcon />
                   </IconButton>;
     }
 
     return (
       <div className={classes.root}>
-        <ListItem color="inherit">
-          <ExpansionPanel className={classes.item}>
+        <ListItem key={this.props.index} color="inherit">
+          <ExpansionPanel key={this.props.index} className={classes.item} defaultExpanded={this.props.index == 0? true : false}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               
               <Input 
@@ -63,34 +68,31 @@ class ACL extends React.Component {
                 onClick={event => { if (!this.props.locked) event.stopPropagation() }}
                 disableUnderline={true}
                 disabled={this.props.locked}
-                defaultValue={this.props.acl['prefix-list']} />
+                value={this.props.acl['prefix-list']} />
               
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={{flexWrap: 'wrap'}}>
-              <Table size="small">
+              <Table size="small" className={classes.table}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Subnet</TableCell>
-                    <TableCell>Allowed</TableCell>
+                    <TableCell className={classes.cell}>Subnet</TableCell>
+                    <TableCell className={classes.cell}>Allowed</TableCell>
+                    <TableCell className={classes.cell} style={{width: '300px'}}>Description</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {this.props.acl['ips'].map((value, index) => 
-                  <TableRow>
-                    <TableCell>
+                {this.props.acl['ips'].map((value, index) =>
+                  <TableRow key={index}>
+                  {keys.map((key, i) =>
+                    <TableCell key={i} className={classes.cell}>
                       <Input 
-                        classes={{input: classes.ip}}
+                        classes={{input: classes[key]}}
                         disableUnderline={true}
                         disabled={this.props.locked}
-                        defaultValue={value['ip']} />
+                        value={value[key]} 
+                        onChange={this.props.aclHandler.bind(this,'update',this.props.index,index,key) }/>
                     </TableCell>
-                    <TableCell>
-                      <Input 
-                        classes={{input: classes.ip}}
-                        disableUnderline={true}
-                        disabled={this.props.locked}
-                        defaultValue={value['allowed']} />
-                    </TableCell>
+                  )}
                   </TableRow>
                 )}
                 </TableBody>
@@ -130,11 +132,30 @@ const styles = theme => ({
   ip: {
     fontSize: '14px',
     fontStyle: 'italic',
-    overflow: 'show',
     '&:disabled': {
       fontStyle: 'normal',
       color: 'black',
     }
+  },
+  allowed: {
+    fontSize: '14px',
+    fontStyle: 'italic',
+    '&:disabled': {
+      fontStyle: 'normal',
+      color: 'black',
+    }
+  },
+  desc: {
+    fontSize: '14px',
+    fontStyle: 'italic',
+    width: '300px',
+    '&:disabled': {
+      fontStyle: 'normal',
+      color: 'black',
+    }
+  },
+  cell: {
+    padding: '2px 10px',
   },
   editButton: {
     margin: 'auto',
@@ -146,8 +167,16 @@ const styles = theme => ({
     },
     margin: '10px auto',
     color: 'black',
-    // marginRight: theme.spacing(2),
     backgroundColor: 'lightGreen'
+  },
+  deleteButton: {
+    '&:hover': {
+      backgroundColor: 'red'
+    },
+    padding: '0',
+    margin: '7px auto',
+    color: 'black',
+    backgroundColor: '#ffc6c4'
   }
 });
 

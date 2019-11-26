@@ -75,25 +75,39 @@ class ACLList extends React.Component {
       locked: true
     };
   }
-
-  handleChange = () => {
-    console.log('change');
-    // console.log(e);
-  }
   
+  aclHandler = (action, prefixId, aclId, key, e) => {
+    var copy = JSON.parse(JSON.stringify(this.state.list))
+
+    if (action === 'add') {
+      copy[prefixId]['ips'].push({'ip': 'ip', 'allowed': 'allowed', 'desc': 'desc'})
+    }
+
+    if (action === 'delete') {
+      copy[prefixId]['ips'].splice(aclId, 1);
+      copy[prefixId]['prefix-list'] = 'hey';
+    }
+
+    if (action === 'update') {
+      copy[prefixId]['ips'][aclId][key] = e.target.value;
+    }
+    
+    this.setState({
+      list: copy
+    });
+  }
+
   handleSave = () => {
     console.log(this.state);
+    this.forceUpdate();
   }
 
   toggleLock = () => {
     this.setState({locked : !this.state.locked});
   }
 
-  addACL = (id) => {
-    var old = this.state.list[id];
-    old.push({'ip': 'ip', 'allowed': 'allowed'})
-    this.setState
-    console.log(this.props.acl['ips']);
+  click = () => {
+    console.log(this.state);
   }
 
   render() {
@@ -105,7 +119,7 @@ class ACLList extends React.Component {
       lockicon = <LockIcon />;
     } else {
       lockicon = <LockOpenIcon />;
-      addButton = <IconButton className={classes.addButton}>
+      addButton = <IconButton className={classes.addButton} onClick={this.click}>
                     <AddIcon />
                   </IconButton>;
     }
@@ -121,7 +135,9 @@ class ACLList extends React.Component {
         </div>
         <List>
           {this.state.list.map((value, index) => 
-            <ACL acl={value} handleChange={this.handleChange} locked={this.state.locked} />
+            <ACL key={index} index={index} 
+              acl={value} locked={this.state.locked}
+              aclHandler={this.aclHandler} handleChange={this.handleChange}  />
           )}
         </List>
         {addButton}
