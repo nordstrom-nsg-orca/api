@@ -72,33 +72,35 @@ class ACLList extends React.Component {
     super(props);
     this.state = {
       list: test,
-      locked: true
+      locked: false
     };
   }
-  
+
   aclHandler = (action, prefixId, aclId, key, e) => {
     var copy = JSON.parse(JSON.stringify(this.state.list))
 
     if (action === 'add') {
-      copy[prefixId]['ips'].push({'ip': 'ip', 'allowed': 'allowed', 'desc': 'desc'})
+      copy[prefixId]['ips'].push({'ip': 'ip', 'allowed': 'allowed', 'desc': 'desc'});
     }
 
     if (action === 'delete') {
       copy[prefixId]['ips'].splice(aclId, 1);
-      copy[prefixId]['prefix-list'] = 'hey';
     }
 
     if (action === 'update') {
-      copy[prefixId]['ips'][aclId][key] = e.target.value;
+      if (aclId) {
+        copy[prefixId]['ips'][aclId][key] = e.target.value;
+      } else
+        copy[prefixId]['prefix-list'] = e.target.value;
     }
     
     this.setState({
-      list: copy
+      list: copy,
+      changed: true
     });
   }
 
   handleSave = () => {
-    console.log(this.state);
     this.forceUpdate();
   }
 
@@ -106,8 +108,12 @@ class ACLList extends React.Component {
     this.setState({locked : !this.state.locked});
   }
 
-  click = () => {
-    console.log(this.state);
+  addList = () => {
+    var copy = JSON.parse(JSON.stringify(this.state.list));
+    copy.push({'prefix-list': 'NAME', 'ips': []});
+    this.setState({
+      list: copy
+    })
   }
 
   render() {
@@ -119,7 +125,7 @@ class ACLList extends React.Component {
       lockicon = <LockIcon />;
     } else {
       lockicon = <LockOpenIcon />;
-      addButton = <IconButton className={classes.addButton} onClick={this.click}>
+      addButton = <IconButton className={classes.addButton} onClick={this.addList}>
                     <AddIcon />
                   </IconButton>;
     }
@@ -129,6 +135,7 @@ class ACLList extends React.Component {
       <div className={classes.root}>
         <div className={classes.labelBar}>
           <Typography className={classes.title} variant="h4">ACL Lists</Typography>
+          <Button className={classes.save}>Save</Button>
           <IconButton onClick={this.toggleLock} className={classes.lockButton} color="inherit">
             {lockicon}
           </IconButton>
@@ -181,6 +188,13 @@ const styles = theme => ({
   },
   lockButton: {
     marginBottom: '8px'
+  },
+  save:{
+    width: '70px',
+    height: '30px',
+    margin: 'auto',
+    paddingTop: '4px',
+    paddingBottom: '8px'
   },
   hidden: {
     display: 'none'

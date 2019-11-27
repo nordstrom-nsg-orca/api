@@ -68,7 +68,8 @@ class ACL extends React.Component {
                 onClick={event => { if (!this.props.locked) event.stopPropagation() }}
                 disableUnderline={true}
                 disabled={this.props.locked}
-                value={this.props.acl['prefix-list']} />
+                value={this.props.acl['prefix-list']}
+                onChange={this.props.aclHandler.bind(this,'update',this.props.index,null,null) } />
               
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={{flexWrap: 'wrap'}}>
