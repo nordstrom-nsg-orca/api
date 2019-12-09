@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "pg": "^7.14.0",
     "serverless-webpack": "^5.3.1",
     "uuid": "^3.3.3",
     "webpack": "^4.41.2"
@@ -13,14 +14,14 @@
     "serverless": "^1.57.0"
   },
   "scripts": {
-    "sls-deploy": "cd $INIT_CWD && aws-okta exec nonprod -- npx sls deploy",
-    "sls-remove": "cd $INIT_CWD && aws-okta exec nonprod -- npx sls remove",
+    "deploy": "aws-okta exec nonprod -- npx sls deploy",
+    "remove": "aws-okta exec nonprod -- npx sls remove",
     "deploy-api": "cd api && npm run sls-deploy",
     "build": "webpack",
     "deploy-storage": "cd storage && npm run sls-deploy",
     "remove-api": "cd api && npm run sls-remove",
     "remove-storage": "cd storage && npm run sls-remove",
-    "test-create": "cd api && aws-okta exec nonprod -- npx sls invoke local --env DYNAMODB_TABLE='nsg-acl-storage-nonprod' --function create --path ../test/api/create.json",
+    "create-list": "aws-okta exec nonprod -- npx sls invoke local --function create-access-list --path test/access_list.json",
     "test-list": "cd api && aws-okta exec nonprod -- npx sls invoke local --env DYNAMODB_TABLE='nsg-acl-storage-nonprod' --function list"
   },
   "repository": {

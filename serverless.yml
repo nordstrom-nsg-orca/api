@@ -22,9 +22,8 @@ package:
   individually: true
 
 functions:
-  create:
-    handler: acl/create.create
-    role: ACLDynamoDBWrite
+  create-access-list:
+    handler: src/access-list/create.create
     events:
       - http:
           path: create
@@ -32,8 +31,7 @@ functions:
           cors: true
 
   list:
-    handler: acl/list.list
-    role: ACLDynamoDBScan
+    handler: src/list.list
     events:
       - http:
           path: list
