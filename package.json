@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "jsonschema": "^1.2.5",
     "pg": "^7.14.0",
     "serverless-webpack": "^5.3.1",
     "uuid": "^3.3.3",
@@ -11,7 +12,9 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.570.0",
-    "serverless": "^1.57.0"
+    "serverless": "^1.57.0",
+    "serverless-aws-documentation": "^1.1.0",
+    "serverless-reqvalidator-plugin": "^1.0.3"
   },
   "scripts": {
     "deploy": "aws-okta exec nonprod -- npx sls deploy",
@@ -21,7 +24,9 @@
     "deploy-storage": "cd storage && npm run sls-deploy",
     "remove-api": "cd api && npm run sls-remove",
     "remove-storage": "cd storage && npm run sls-remove",
-    "create-list": "aws-okta exec nonprod -- npx sls invoke local --function create-access-list --path test/access_list.json",
+    "test-create-list": "aws-okta exec nonprod -- npx sls invoke local --function create-access-list --path test/access_list.json",
+    "test-delete-list": "aws-okta exec nonprod -- npx sls invoke local --function delete-access-list --path test/delete-access-list.json",
+    "test-update-list": "aws-okta exec nonprod -- npx sls invoke local --function update-access-list --path test/update-access-list.json",
     "test-list": "cd api && aws-okta exec nonprod -- npx sls invoke local --env DYNAMODB_TABLE='nsg-acl-storage-nonprod' --function list"
   },
   "repository": {

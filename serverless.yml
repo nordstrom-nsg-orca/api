@@ -7,16 +7,6 @@ provider:
   region: us-west-2
   stage: ${opt:stage, 'nonprod'}
   runtime: nodejs10.x
-  environment:
-    DYNAMODB_TABLE: ${self:custom.ACLTableName}
-
-custom:
-  ACLTableName: !ImportValue ACLTableName
-  ACLTableARN: !ImportValue ACLTableARN
-  TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
-  webpack:
-    webpackConfig: webpack.config.js
-    includeModules: false
 
 package:
   individually: true
@@ -27,6 +17,22 @@ functions:
     events:
       - http:
           path: create
+          method: post
+          cors: true
+
+  delete-access-list:
+    handler: src/access-list/delete.delete
+    events:
+      - http:
+          path: delete
+          method: delete
+          cors: true
+
+  update-access-list:
+    handler: src/access-list/update.update
+    events:
+      - http:
+          path: update
           method: post
           cors: true
 
@@ -61,6 +67,13 @@ functions:
 #           method: delete
 #           cors: true
 
+custom:
+  ACLTableName: !ImportValue ACLTableName
+  ACLTableARN: !ImportValue ACLTableARN
+  TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
+  webpack:
+    webpackConfig: webpack.config.js
+    includeModules: false
 
 plugins:
   - serverless-webpack
