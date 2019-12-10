@@ -27,7 +27,7 @@
     "test-create-list": "aws-okta exec nonprod -- npx sls invoke local --function create-access-list --path test/access_list.json",
     "test-delete-list": "aws-okta exec nonprod -- npx sls invoke local --function delete-access-list --path test/delete-access-list.json",
     "test-update-list": "aws-okta exec nonprod -- npx sls invoke local --function update-access-list --path test/update-access-list.json",
-    "test-list": "cd api && aws-okta exec nonprod -- npx sls invoke local --env DYNAMODB_TABLE='nsg-acl-storage-nonprod' --function list"
+    "test-create-item": "aws-okta exec nonprod -- npx sls invoke local --function create-access-item --path test/create-access-item.json"
   },
   "repository": {
     "type": "git",

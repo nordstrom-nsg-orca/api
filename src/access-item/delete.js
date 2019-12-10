@@ -2,9 +2,8 @@
 
 const validate = require('jsonschema').validate;
 
-const db = require('../db.js');
 const { Client } = require('pg');
-
+const db = require('../db.js');
 const client = new Client(db);
 client.connect();
 
@@ -12,20 +11,15 @@ const reqSchema= {
   "id": "access-list-delete",
   "type": "object",
   "properties": {
-    "list_id": {"type": "int"},
-    "subnet": {
-    	"type": "string",
-    	"format": "ipv4"
-    },
-    "description": {"type": "string"}
+    "id": {"type": "integer"}
   },
-  "required": ["list_id", "subnet", "description"]
+  "required": ["id"]
 }
 
-exports.create = async(event, context) => {
+exports.delete = async(event, context, callback) => {
   const valid = validate(event, reqSchema);
   
-  if (!valid.valid) {
+  if (!valid.valid){
     var errs = [];
     for (var i = 0; i < valid.errors.length; i++)
       errs.push(valid.errors[i].message);
@@ -36,17 +30,22 @@ exports.create = async(event, context) => {
     }
   }
 
-  const query = `INSERT INTO access_item(list_id, subnet, description) 
-  VALUES ($1, $2, $3) RETURNING id`;
-  const values = [event['list_id'], event['subnet'], event['description']];
+
+  const query = 'DELETE FROM access_item WHERE id = $1';
+  const values = [event['id']];
 
   try {
     const res = await client.query(query, values);
-    console.log(res);
+    
+    if (res.rowCount == 0)
+      return {
+        statusCode: 400,
+        body: "No item found with id " + event['id']
+      }
+
     return {
       statusCode: 200,
       body: {
-        id: res.rows[0].id
       }
     }
   } catch (err) {

@@ -36,6 +36,30 @@ functions:
           method: post
           cors: true
 
+  create-access-item:
+    handler: src/access-item/create.create
+    events:
+      - http:
+          path: create
+          method: post
+          cors: true
+
+  # delete-access-item:
+  #   handler: src/access-item/delete.delete
+  #   events:
+  #     - http:
+  #         path: delete
+  #         method: delete
+  #         cors: true
+
+  # update-access-item:
+  #   handler: src/access-item/update.update
+  #   events:
+  #     - http:
+  #         path: update
+  #         method: post
+  #         cors: true
+
   list:
     handler: src/list.list
     events:
