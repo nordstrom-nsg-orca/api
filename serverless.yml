@@ -7,93 +7,34 @@ provider:
   region: us-west-2
   stage: ${opt:stage, 'nonprod'}
   runtime: nodejs10.x
+  vpc:
+    securityGroupIds:
+      - sg-0d2e53ade40e60060
+    subnetIds:
+      - subnet-0126fe03fa91a38de
+      - subnet-0386f8ab22bd7a664
 
 package:
   individually: true
 
 functions:
-  create-access-list:
-    handler: src/access-list/create.create
-    events:
-      - http:
-          path: create
-          method: post
-          cors: true
-
-  delete-access-list:
-    handler: src/access-list/delete.delete
-    events:
-      - http:
-          path: delete
-          method: delete
-          cors: true
-
-  update-access-list:
-    handler: src/access-list/update.update
-    events:
-      - http:
-          path: update
-          method: post
-          cors: true
-
-  create-access-item:
-    handler: src/access-item/create.create
-    events:
-      - http:
-          path: create
-          method: post
-          cors: true
-
-  # delete-access-item:
-  #   handler: src/access-item/delete.delete
-  #   events:
-  #     - http:
-  #         path: delete
-  #         method: delete
-  #         cors: true
-
-  # update-access-item:
-  #   handler: src/access-item/update.update
-  #   events:
-  #     - http:
-  #         path: update
-  #         method: post
-  #         cors: true
-
   list:
-    handler: src/list.list
+    handler: src/list.handler
     events:
       - http:
-          path: list
-          method: get
+          method: GET
+          path: api/{table}
           cors: true
-
-#   get:
-#     handler: todos/get.get
-#     events:
-#       - http:
-#           path: todos/{id}
-#           method: get
-#           cors: true
-
-#   update:
-#     handler: todos/update.update
-#     events:
-#       - http:
-#           path: todos/{id}
-#           method: put
-#           cors: true
-
-#   delete:
-#     handler: todos/delete.delete
-#     events:
-#       - http:
-#           method: delete
-#           cors: true
+  
+  create:
+    handler: src/create.handler
+    events:
+      - http:
+          method: PUT
+          path: api/{table}
+          cors: true
 
 custom:
-  ACLTableName: !ImportValue ACLTableName
-  ACLTableARN: !ImportValue ACLTableARN
   TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
   webpack:
     webpackConfig: webpack.config.js

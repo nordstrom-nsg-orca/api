@@ -1,29 +1,26 @@
 'use strict';
 
-const uuid = require('uuid');
-const { DynamoDB } = require('aws-sdk');
+const db = require('./common/db.js');
 
-const dynamoDb = new DynamoDB.DocumentClient();
+const { Client } = require('pg');
+const client = new Client(db);
+client.connect();
 
-exports.list = async(event, context) => {
-	const params = { TableName: process.env.DYNAMODB_TABLE };
-	
-	try {
-		const res = await dynamoDb.scan(params).promise();
-		
-		// res.Items.forEach(element => {
-		// 	console.log(JSON.parse(element.ips))
-		// })
-		return {
-			statusCode: res.statusCode,
-			body: JSON.stringify(res.Items)
-		}
-	} catch(err) {
-		console.error(err)
-		return {
-			statusCode: err.statusCode || 501,
-			headers: {'Content-Type': 'text/plain' },
-			body: 'Couldn\'t create item',
-		}
-	}
+exports.handler = async(event, context) => {
+  const query = `SELECT * FROM ${event.pathParameters.table}`;
+  
+  let res = null;
+  try {
+    res = await client.query(query);
+  } catch (err) {
+    return {
+      "statusCode": 500,
+      "body": JSON.stringify(err)
+    }
+  }
+  
+  return {
+    "statusCode": 200,
+    "body": JSON.stringify(res.rows
+  }
 }

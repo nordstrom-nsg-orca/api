@@ -24,10 +24,8 @@
     "deploy-storage": "cd storage && npm run sls-deploy",
     "remove-api": "cd api && npm run sls-remove",
     "remove-storage": "cd storage && npm run sls-remove",
-    "test-create-list": "aws-okta exec nonprod -- npx sls invoke local --function create-access-list --path test/access_list.json",
-    "test-delete-list": "aws-okta exec nonprod -- npx sls invoke local --function delete-access-list --path test/delete-access-list.json",
-    "test-update-list": "aws-okta exec nonprod -- npx sls invoke local --function update-access-list --path test/update-access-list.json",
-    "test-create-item": "aws-okta exec nonprod -- npx sls invoke local --function create-access-item --path test/create-access-item.json"
+    "test": "aws-okta exec nonprod -- npx sls invoke local --function create --path test/test.json",
+    "test-list": "aws-okta exec nonprod -- npx sls invoke local --function list --path test/test.json"
   },
   "repository": {
     "type": "git",
