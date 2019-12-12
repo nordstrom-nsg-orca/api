@@ -8,35 +8,57 @@ const client = new Client(db);
 client.connect();
 
 exports.handler = async(event, context) => {
-  console.log("EVENT");
-  console.log(event);
-  console.log("\n")
-
-  const schema = await Schema.build(client, event.pathParameters.table, 'create');
-  const valid = Schema.validate(event, schema, 'create');
+  const table = event.pathParameters.table;
+  const body = JSON.parse(event.body);
+  console.log(body);
+  const schema = await Schema.build(client, table, 'create');
+  const valid = Schema.validate(body, schema, 'create');
 
   if (!valid.valid)
     return {
-      statusCode: 400,
-      body: valid.errs
+      "statusCode": 400,
+      "body": JSON.stringify(valid.errs)
     }
 
-  const query = `INSERT INTO access_item(list_id, subnet, description) 
-  VALUES ($1, $2, $3) RETURNING id`;
-  const values = [event['list_id'], event['subnet'], event['description']];
-
+  const query = buildQuery(table, schema, body);
+  console.log(query);
   let res = null;
   try {
-    res = await client.query(query, values);
+    res = await client.query(query.query, query.values);
+    console.log(res);
   } catch (err) {
     return {
-      statusCode: 500,
-      body: err
+      "statusCode": 500,
+      "body": JSON.stringify(err)
     }
   }
   
   return {
-    statusCode: 200,
-    body: res.rows[0].id
+    "statusCode": 200,
+    "body": JSON.stringify({id: res.rows[0].id})
   }
+}
+
+function buildQuery(table, schema, body) {
+  let query = `INSERT INTO ${table}`;
+  let cols = '(';
+  let vals = 'VALUES(';
+  let valsArr = [];
+  let i = 1;
+  for (let key in schema.properties) {
+    if (typeof body[key] !== 'undefined') {
+      cols += `${key},`;
+      vals += `$${i},`
+      valsArr.push(body[key]);
+      i++;
+    }
+  }
+  cols = `${cols.slice(0, -1)})`
+  vals = `${vals.slice(0, -1)})`
+
+  return {
+    query: `${query}${cols} ${vals} RETURNING id`,
+    values: valsArr
+  }
+
 }

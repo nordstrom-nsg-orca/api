@@ -33,6 +33,14 @@ functions:
           method: PUT
           path: api/{table}
           cors: true
+  delete:
+    handler: src/delete.handler
+    events:
+      - http:
+          method: DELETE
+          path: api/{table}/{id}
+          cors: true
+
 
 custom:
   TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy

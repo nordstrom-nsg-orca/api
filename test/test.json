@@ -1,3 +1,4 @@
 {
-  "pathParameters": {"table": "access_item"}
+  "pathParameters": {"table": "access_item"},
+  "body": "{\"list_id\": 4, \"subnet\": \"10.10.10.10\"}"
 }
