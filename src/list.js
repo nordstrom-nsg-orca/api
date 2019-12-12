@@ -21,6 +21,11 @@ exports.handler = async(event, context) => {
   
   return {
     "statusCode": 200,
-    "body": JSON.stringify(res.rows
+    "headers": {
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET"
+    },
+    "body": JSON.stringify(res.rows)
   }
 }
