@@ -9,7 +9,6 @@ client.connect();
 exports.handler = async(event, context) => {
   const table = event.pathParameters.table;
   const id = event.pathParameters.id;
-  // const body = JSON.parse(event.body);
 
   const query = buildQuery(table, id);
   

@@ -24,7 +24,7 @@
     "deploy-storage": "cd storage && npm run sls-deploy",
     "remove-api": "cd api && npm run sls-remove",
     "remove-storage": "cd storage && npm run sls-remove",
-    "test": "aws-okta exec nonprod -- npx sls invoke local --function create --path test/test.json",
+    "test-create": "aws-okta exec nonprod -- npx sls invoke local --function create --path test/create.json",
     "test-delete": "aws-okta exec nonprod -- npx sls invoke local --function delete --path test/delete.json",
     "test-list": "aws-okta exec nonprod -- npx sls invoke local --function list --path test/test.json"
   },

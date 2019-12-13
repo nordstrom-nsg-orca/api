@@ -10,7 +10,6 @@ client.connect();
 exports.handler = async(event, context) => {
   const table = event.pathParameters.table;
   const body = JSON.parse(event.body);
-  console.log(body);
   const schema = await Schema.build(client, table, 'create');
   const valid = Schema.validate(body, schema, 'create');
 

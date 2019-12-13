@@ -8,7 +8,7 @@ client.connect();
 
 exports.handler = async(event, context) => {
   const query = `SELECT * FROM ${event.pathParameters.table}`;
-  
+
   let res = null;
   try {
     res = await client.query(query);
