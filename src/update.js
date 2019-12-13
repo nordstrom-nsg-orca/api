@@ -8,12 +8,8 @@ const client = new Client(db);
 client.connect();
 
 exports.handler = async(event, context) => {
-// async function handler() {
   const table = event.pathParameters.table;
-  // const table = event.pathParameters.id;
   const body = JSON.parse(event.body);
-  // const table = "access_item";
-  // const body = {"subnet": "10.1.1.1", "id": 2, 'description': 'testing'};
   const schema = await Schema.build(client, table, 'update');
   const valid = Schema.validate(body, schema, 'update');
   console.log(valid);
@@ -30,7 +26,6 @@ exports.handler = async(event, context) => {
     res = await client.query(query.query, query.values);
     console.log(res);
   } catch (err) {
-    // console.log(err);
     return {
       "statusCode": 500,
       "body": JSON.stringify(err)
@@ -73,4 +68,3 @@ function buildQuery(table, schema, body) {
   }
 
 }
-// handler();
