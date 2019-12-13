@@ -9,18 +9,19 @@ client.connect();
 
 exports.handler = async(event, context) => {
   const table = event.pathParameters.table;
+  const table = event.pathParameters.id;
   const body = JSON.parse(event.body);
   const schema = await Schema.build(client, table, 'update');
   const valid = Schema.validate(body, schema, 'update');
-  console.log(valid);
+  // console.log(valid);
   if (!valid.valid)
     return {
       "statusCode": 400,
       "body": JSON.stringify(valid.errs)
     }
 
-  const query = buildQuery(table, schema, body);
-  // console.log(query);
+  const query = buildQuery(id, table, schema, body);
+  console.log(query);
   let res = null;
   try {
     res = await client.query(query.query, query.values);
@@ -38,25 +39,18 @@ exports.handler = async(event, context) => {
   }
 }
 
-function buildQuery(table, schema, body) {
+function buildQuery(id, table, schema, body) {
   let query = `UPDATE ${table}`;
   let cols = ' SET ';
-  let vals = 'VALUES(';
   let valsArr = [];
   let i = 1;
-  let id;
   for (let key in schema.properties) {
     if (typeof body[key] !== 'undefined') {
-      if (key === 'id') {
-          id = body[key];
-          continue;
-      }
       if (i > 1) {
         cols += `, ${key} = $${i}`;
       } else {
         cols += `${key} = $${i}`;
       }
-
       valsArr.push(body[key]);
       i++;
     }
@@ -68,3 +62,4 @@ function buildQuery(table, schema, body) {
   }
 
 }
+// handler();

@@ -38,7 +38,7 @@ functions:
     events:
       - http:
           method: PUT
-          path: api/{table}
+          path: api/{table}/{id}
           cors: true
   delete:
     handler: src/delete.handler
