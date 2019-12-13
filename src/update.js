@@ -14,7 +14,6 @@ exports.handler = async(event, context) => {
 
   const schema = await Schema.build(client, table, 'update');
   const valid = Schema.validate(body, schema, 'update');
-  // console.log(valid);
   if (!valid.valid)
     return {
       "statusCode": 400,
@@ -22,11 +21,10 @@ exports.handler = async(event, context) => {
     }
 
   const query = buildQuery(id, table, schema, body);
-  // console.log(query);
+
   let res = null;
   try {
     res = await client.query(query.query, query.values);
-    console.log(res);
   } catch (err) {
     return {
       "statusCode": 500,

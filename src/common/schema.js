@@ -18,7 +18,6 @@ module.exports.build = async (client, table, action) => {
   let res;
   try {
     res = await client.query(query, values);
-    console.log(res.rows);
   } catch (err) {
     return {
       err: err
