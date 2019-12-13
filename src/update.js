@@ -21,7 +21,7 @@ exports.handler = async(event, context) => {
     }
 
   const query = buildQuery(id, table, schema, body);
-  console.log(query);
+  // console.log(query);
   let res = null;
   try {
     res = await client.query(query.query, query.values);
