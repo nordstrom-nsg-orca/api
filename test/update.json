@@ -1,0 +1,4 @@
+{
+  "pathParameters": {"table": "access_item"},
+  "body": "{\"subnet\": \"10.1.1.1\", \"id\": 2, \"description\": \"testing\"}"
+}

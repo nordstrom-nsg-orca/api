@@ -25,9 +25,16 @@ functions:
           method: GET
           path: api/{table}
           cors: true
-  
+
   create:
     handler: src/create.handler
+    events:
+      - http:
+          method: PUT
+          path: api/{table}
+          cors: true
+  update:
+    handler: src/update.handler
     events:
       - http:
           method: PUT
