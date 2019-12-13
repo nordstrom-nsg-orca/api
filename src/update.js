@@ -11,6 +11,7 @@ exports.handler = async(event, context) => {
   const table = event.pathParameters.table;
   const id = event.pathParameters.id;
   const body = JSON.parse(event.body);
+
   const schema = await Schema.build(client, table, 'update');
   const valid = Schema.validate(body, schema, 'update');
   // console.log(valid);
@@ -46,11 +47,7 @@ function buildQuery(id, table, schema, body) {
   let i = 1;
   for (let key in schema.properties) {
     if (typeof body[key] !== 'undefined') {
-      if (i > 1) {
-        cols += `, ${key} = $${i}`;
-      } else {
-        cols += `${key} = $${i}`;
-      }
+      cols += (i > 1 ? `, ${key} = $${i}`: `${key} = $${i}`);
       valsArr.push(body[key]);
       i++;
     }
@@ -62,4 +59,3 @@ function buildQuery(id, table, schema, body) {
   }
 
 }
-// handler();
