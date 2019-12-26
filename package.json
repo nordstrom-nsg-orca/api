@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@okta/jwt-verifier": "^1.0.0",
     "jsonschema": "^1.2.5",
     "pg": "^7.14.0",
     "serverless-webpack": "^5.3.1",
@@ -27,7 +28,7 @@
     "test-create": "aws-okta exec nonprod -- npx sls invoke local --function create --path test/create.json",
     "test-delete": "aws-okta exec nonprod -- npx sls invoke local --function delete --path test/delete.json",
     "test-update": "aws-okta exec nonprod -- npx sls invoke local --function update --path test/update.json",
-    "test-list": "aws-okta exec nonprod -- npx sls invoke local --function list --path test/test.json"
+    "test-list": "aws-okta exec nonprod -- npx sls invoke local --function list --path test/list.json"
   },
   "repository": {
     "type": "git",

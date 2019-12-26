@@ -1,14 +1,25 @@
 'use strict';
 
 const db = require('./common/db.js');
+const corsHeaders = require('./common/headers.js');
+const auth = require('./common/auth.js');
 
 const { Client } = require('pg');
 const client = new Client(db);
 client.connect();
 
 exports.handler = async(event, context) => {
-  const query = `SELECT * FROM ${event.pathParameters.table}`;
+  console.log(event);
+  let token = await auth.verifyToken(event.headers.Authorization);
+  if (!token.valid) {
+    return {
+      "statusCode": 403,
+      "body": JSON.stringify({"msg": "token invalid"})
+    }
+  }
 
+  const query = `SELECT * FROM ${event.pathParameters.table}`;
+  console.log(query);
   let res = null;
   try {
     res = await client.query(query);
@@ -19,6 +30,7 @@ exports.handler = async(event, context) => {
     }
   }
   
+  console.log('query good');
   return {
     "statusCode": 200,
     "headers": {
