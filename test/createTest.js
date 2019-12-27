@@ -52,8 +52,13 @@ describe('Testing create endpoint', () => {
         Authorization: data.headers.Authorization
       }
     });
-
-    // console.log(response);
+    let id = await response.json().then(res => {
+      return res.id;
+    });
+    // writes to delete.json for clean up later.
+    let deleteData = JSON.parse(fs.readFileSync('./test/delete.json', 'utf8'));
+    deleteData.pathParameters.id = id;
+    fs.writeFileSync("./test/delete.json", JSON.stringify(deleteData));
     expect(response.status).equal(200);
   });
 });
