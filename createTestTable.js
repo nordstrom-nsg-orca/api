@@ -9,7 +9,12 @@ const query = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME}(
   name VARCHAR NOT NULL
 )`;
 
-client.query(query).then(res => {
-  console.log(res);
+try {
+  client.query(query).then(res => {
+    console.log(res);
+    process.exit();
+  });
+} catch(err) {
+  console.log(err);
   process.exit();
-});
+}
