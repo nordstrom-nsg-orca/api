@@ -1,10 +1,11 @@
-image: node:latest
 stages:
   - test
 
 unit-testing:
   stage: test
+  image: node:latest
   before_scripts:
+    - npm install
     - node createTestTable.js
   scripts:
     - npm test
