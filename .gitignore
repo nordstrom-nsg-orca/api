@@ -2,5 +2,4 @@
 .serverless/
 node_modules/
 .webpack/
-db.js
 .env
