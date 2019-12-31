@@ -8,8 +8,8 @@ test:
     - chmod +x setup_env.sh
     - ./setup_env.sh
     - npm install
-    - node createTestTable.js
   script:
+    - node createTestTable.js
     - npm test
   # only:
   #   - merge_requests
