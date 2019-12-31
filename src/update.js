@@ -9,13 +9,13 @@ const client = new Client(db);
 client.connect();
 
 exports.handler = async(event, context) => {
-  let token = await auth.verifyToken(event.headers.Authorization);
-  if (!token.valid) {
-    return {
-      "statusCode": 403,
-      "body": JSON.stringify({"msg": "token invalid"})
-    }
-  }
+  // let token = await auth.verifyToken(event.headers.Authorization);
+  // if (!token.valid) {
+  //   return {
+  //     "statusCode": 403,
+  //     "body": JSON.stringify({"msg": "token invalid"})
+  //   }
+  // }
 
   const table = event.pathParameters.table;
   const id = event.pathParameters.id;
