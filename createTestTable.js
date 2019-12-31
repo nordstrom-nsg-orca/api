@@ -1,5 +1,5 @@
 const db = require('./src/common/db.js');
-console.log(db);
+// console.log(db);
 const { Client } = require('pg');
 const client = new Client(db);
 const TABLE_NAME = 'test';
@@ -10,11 +10,12 @@ const query = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME}(
 )`;
 
 
-client.query(query).then(res => {
-  try {
+try {
+  client.query(query).then(res => {
     console.log(res);
-  } catch(err) {
-    console.log(err);
-  }
+    process.exit();
+  });
+} catch(err) {
+  console.log(err);
   process.exit();
-});
+}
