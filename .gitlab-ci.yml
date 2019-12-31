@@ -5,6 +5,8 @@ test:
   stage: test
   image: node:latest
   before_script:
+    - chmod +x setup_env.sh
+    - ./setup_env.sh
     - npm install
     - node createTestTable.js
   script:
