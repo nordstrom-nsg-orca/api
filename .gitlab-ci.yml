@@ -1,0 +1,12 @@
+image: node:latest
+stages:
+  - test
+
+unitTesting:
+  stage: test
+  before_scripts:
+    - node createTestTable.js
+  scripts:
+    - npm test
+  # only:
+  #   - merge_requests
