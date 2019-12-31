@@ -2,7 +2,7 @@ image: node:latest
 stages:
   - test
 
-unitTesting:
+unit-testing:
   stage: test
   before_scripts:
     - node createTestTable.js
