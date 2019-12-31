@@ -6,7 +6,7 @@ const db = {
     database: process.env.NSG_DB_NAME,
     user: process.env.NSG_DB_USER,
     password: process.env.NSG_DB_PSSW,
-    // query_timeout: 5500
+    query_timeout: 5500
 };
 
 module.exports = db;
