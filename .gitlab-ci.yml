@@ -4,10 +4,10 @@ stages:
 test:
   stage: test
   image: node:latest
-  before_scripts:
+  before_script:
     - npm install
     - node createTestTable.js
-  scripts:
+  script:
     - npm test
   # only:
   #   - merge_requests
