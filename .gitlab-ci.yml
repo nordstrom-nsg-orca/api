@@ -9,7 +9,7 @@ test:
     - ./setup_env.sh
     - npm install
     - node createTestTable.js
-  script:
-    - npm test
+  # script:
+  #   - npm test
   # only:
   #   - merge_requests
