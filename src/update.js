@@ -20,7 +20,6 @@ exports.handler = async(event, context) => {
   const table = event.pathParameters.table;
   const id = event.pathParameters.id;
   const body = JSON.parse(event.body);
-
   const schema = await Schema.build(client, table, 'update');
   const valid = Schema.validate(body, schema, 'update');
   if (!valid.valid)
@@ -68,5 +67,4 @@ function buildQuery(id, table, schema, body) {
     query: `${query}${cols} WHERE id = $${i} RETURNING id`,
     values: valsArr
   }
-
 }

@@ -24,7 +24,6 @@ exports.handler = async(event, context) => {
   let res = null;
   try {
     res = await client.query(query.query, query.values);
-    // console.log(res);
   } catch (err) {
     return {
       "statusCode": 500,
