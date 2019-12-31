@@ -11,4 +11,5 @@ const query = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME}(
 
 client.query(query).then(res => {
   console.log(res);
+  process.exit();
 });
