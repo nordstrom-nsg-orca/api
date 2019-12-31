@@ -8,30 +8,30 @@ const client = new Client(db);
 client.connect();
 
 exports.handler = async(event, context) => {
-  let token = await auth.verifyToken(event.headers.Authorization);
-  if (!token.valid) {
-    return {
-      "statusCode": 403,
-      "body": JSON.stringify({"msg": "token invalid"})
-    }
-  }
+  // let token = await auth.verifyToken(event.headers.Authorization);
+  // if (!token.valid) {
+  //   return {
+  //     "statusCode": 403,
+  //     "body": JSON.stringify({"msg": "token invalid"})
+  //   }
+  // }
 
   const table = event.pathParameters.table;
   const id = event.pathParameters.id;
 
   const query = buildQuery(table, id);
-  
+
   let res = null;
   try {
     res = await client.query(query.query, query.values);
-    console.log(res);
+    // console.log(res);
   } catch (err) {
     return {
       "statusCode": 500,
       "body": JSON.stringify(`{"msg": "${err}"}`)
     }
   }
-  
+
   return {
     "statusCode": 200,
     "body": JSON.stringify("ok"),

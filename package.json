@@ -5,14 +5,16 @@
   "main": "index.js",
   "dependencies": {
     "@okta/jwt-verifier": "^1.0.0",
+    "crypto-js": "^3.1.9-1",
     "jsonschema": "^1.2.5",
-    "pg": "^7.14.0",
+    "pg": "^7.17.0",
+    "pg-promise": "^10.3.2",
     "serverless-webpack": "^5.3.1",
     "uuid": "^3.3.3",
     "webpack": "^4.41.2"
   },
   "devDependencies": {
-    "aws-sdk": "^2.570.0",
+    "aws-sdk": "^2.596.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.2",
@@ -25,7 +27,7 @@
     "remove": "aws-okta exec nonprod -- npx sls remove",
     "deploy-api": "cd api && npm run sls-deploy",
     "build": "webpack",
-    "test": "mocha",
+    "test": "mocha --exit",
     "deploy-storage": "cd storage && npm run sls-deploy",
     "remove-api": "cd api && npm run sls-remove",
     "remove-storage": "cd storage && npm run sls-remove",
