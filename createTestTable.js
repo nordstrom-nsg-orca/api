@@ -1,6 +1,6 @@
 const db = require('./src/common/db.js');
 const { Client } = require('pg');
-const client;
+let client;
 try {
   client = new Client(db);
 } catch(err) {
