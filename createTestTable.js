@@ -1,7 +1,8 @@
 const db = require('./src/common/db.js');
 const { Client } = require('pg');
+const client;
 try {
-  const client = new Client(db);
+  client = new Client(db);
 } catch(err) {
   console.log(err);
   process.exit();
