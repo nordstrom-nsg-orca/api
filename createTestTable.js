@@ -1,7 +1,11 @@
 const db = require('./src/common/db.js');
-// console.log(db);
 const { Client } = require('pg');
-const client = new Client(db);
+try {
+  const client = new Client(db);
+} catch(err) {
+  console.log(err);
+  process.exit();
+}
 const TABLE_NAME = 'test';
 try {
   client.connect();
