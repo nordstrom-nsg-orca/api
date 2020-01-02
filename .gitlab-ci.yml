@@ -10,6 +10,6 @@ test:
     - npm install
   script:
     - node createTestTable.js
-    - npm test
+    # - npm test
   # only:
   #   - merge_requests
