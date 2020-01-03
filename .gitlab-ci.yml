@@ -12,5 +12,7 @@ test:
     - export NODE_ENV=test
     - node createTestTable.js
     - npm test
-  # only:
-  #   - merge_requests
+  only:
+    - merge_requests
+
+# deploy to AWS below?
