@@ -12,10 +12,10 @@ describe('Testing create endpoint', () => {
     let response = await createFunction.handler(eventData, { /* context */ });
     expect(response.statusCode).equal(400);
   });
-  // it('Successful Create', async() => {
-  //   let response = await createFunction.handler(data, { /* context */ });
-  //   expect(response.statusCode).equal(200);
-  // });
+  it('Successful Create', async() => {
+    let response = await createFunction.handler(data, { /* context */ });
+    expect(response.statusCode).equal(200);
+  });
   it('Bad body request', async() => {
     const eventData = {pathParameters: data.pathParameters, body: "{\"other\":  \"Testing create\"}"};
     let response = await createFunction.handler(eventData, { /* context */ });
