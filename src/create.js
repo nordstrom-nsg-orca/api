@@ -9,19 +9,18 @@ const client = new Client(db);
 client.connect();
 
 exports.handler = async(event, context) => {
-  let token = await auth.verifyToken(event.headers.Authorization);
-  if (!token.valid) {
-    return {
-      "statusCode": 403,
-      "body": JSON.stringify({"msg": "token invalid"})
-    }
-  }
-
+  // let token = await auth.verifyToken(event.headers.Authorization);
+  // if (!token.valid) {
+  //   return {
+  //     "statusCode": 403,
+  //     "body": JSON.stringify({"msg": "token invalid"})
+  //   }
+  // }
+  // console.log(event);
   const table = event.pathParameters.table;
   const body = JSON.parse(event.body);
   const schema = await Schema.build(client, table, 'create');
   const valid = Schema.validate(body, schema, 'create');
-
   if (!valid.valid)
     return {
       "statusCode": 400,
@@ -38,7 +37,7 @@ exports.handler = async(event, context) => {
       "body": JSON.stringify(err)
     }
   }
-  
+
   return {
     "statusCode": 200,
     "headers": {
