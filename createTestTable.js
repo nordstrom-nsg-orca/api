@@ -1,4 +1,5 @@
 const db = require('./src/common/db.js');
+console.log(process.env.NODE_ENV);
 console.log(db);
 const { Client } = require('pg');
 const client = new Client(db);
