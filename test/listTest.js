@@ -4,7 +4,7 @@ const assert = require('assert');
 const listFunction = require('../src/list.js');
 const fs = require('fs');
 const fetch = require('node-fetch');
-const data = JSON.parse(fs.readFileSync('./test/list.json', 'utf8'));
+const data = JSON.parse(fs.readFileSync('./test/json/list.json', 'utf8'));
 console.log(process.env.NODE_ENV);
 
 describe('Testing list endpoint', () => {

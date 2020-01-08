@@ -3,23 +3,22 @@ dotenv.config({path: '../../.env'});
 let db;
 if (process.env.NODE_ENV === 'test') {
   db = {
-      host: process.env.NSG_DB_TEST_URL, // server name or IP address;
+      host: 'nsgexternaldb.clqzasuuu8wm.us-west-2.rds.amazonaws.com', // server name or IP address;
       port: 5432,
-      database: process.env.NSG_TEST_DB_NAME,
-      user: process.env.NSG_DB_USER,
-      password: process.env.NSG_DB_PSSW,
+      database: 'nsgExternalDB',
+      user: 'nsg',
+      password: process.env.NSG_DB_PASS ,
       query_timeout: 5500
   };
 }
 else {
   db = {
-     host: process.env.NSG_DB_URL, // server name or IP address;
+     host: 'nsgclouddb.clqzasuuu8wm.us-west-2.rds.amazonaws.com', // server name or IP address;
      port: 5432,
-     database: process.env.NSG_DB_NAME,
-     user: process.env.NSG_DB_USER,
-     password: process.env.NSG_DB_PSSW,
+     database: 'nsgCloudDB',
+     user: 'nsg',
+     password: process.env.NSG_DB_PASS,
      query_timeout: 5500
  };
 }
-// console.log(db);
 module.exports = db;

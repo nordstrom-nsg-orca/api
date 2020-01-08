@@ -18,10 +18,7 @@ provider:
       - subnet-0126fe03fa91a38de
       - subnet-0386f8ab22bd7a664
   environment:
-    NSG_DB_URL: nsgclouddb.clqzasuuu8wm.us-west-2.rds.amazonaws.com
-    NSG_DB_USER: ${env:DB_USER}
-    NSG_DB_PSSW: ${env:DB_PWD}
-    NSG_DB_NAME: nsgCloudDB
+    NSG_DB_PASS: ${env:DB_PWD}
 
 package:
   individually: true

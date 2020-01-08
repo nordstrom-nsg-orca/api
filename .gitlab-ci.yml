@@ -5,14 +5,12 @@ test:
   stage: test
   image: node:latest
   before_script:
-    - chmod +x setup_env.sh
-    - ./setup_env.sh
     - npm install
   script:
     - export NODE_ENV=test
-    - node createTestTable.js
+    - export NSG_DB_PASS=$NSG_DB_PASS
     - npm test
-  only:
-    - merge_requests
+  # only:
+  #   - merge_requests
 
 # deploy to AWS below?

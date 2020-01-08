@@ -4,7 +4,7 @@ const assert = require('assert');
 const updateFunction = require('../src/update.js');
 const fs = require('fs');
 const fetch = require('node-fetch');
-const data = JSON.parse(fs.readFileSync('./test/update.json', 'utf8'));
+const data = JSON.parse(fs.readFileSync('./test/json/update.json', 'utf8'));
 
 describe('Testing update endpoint', () => {
 

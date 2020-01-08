@@ -4,7 +4,7 @@ const assert = require('assert');
 const deleteFunction = require('../src/delete.js');
 const fs = require('fs');
 const fetch = require('node-fetch');
-const data = JSON.parse(fs.readFileSync('./test/delete.json', 'utf8'));
+const data = JSON.parse(fs.readFileSync('./test/json/delete.json', 'utf8'));
 
 describe('Testing delete endpoint', () => {
 

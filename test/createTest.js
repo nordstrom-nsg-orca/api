@@ -4,7 +4,7 @@ const assert = require('assert');
 const createFunction = require('../src/create.js');
 const fs = require('fs');
 const fetch = require('node-fetch');
-const data = JSON.parse(fs.readFileSync('./test/create.json', 'utf8'));
+const data = JSON.parse(fs.readFileSync('./test/json/create.json', 'utf8'));
 
 describe('Testing create endpoint', () => {
   it('Empty body request', async() => {
