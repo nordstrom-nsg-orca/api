@@ -10,7 +10,7 @@ test:
     - export NODE_ENV=test
     - export NSG_DB_PASS=$NSG_DB_PASS
     - npm test
-  # only:
-  #   - merge_requests
+  only:
+    - merge_requests
 
 # deploy to AWS below?
