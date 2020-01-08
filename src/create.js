@@ -5,14 +5,15 @@ const db = require('./common/db.js');
 const auth = require('./common/auth.js');
 
 const { Client } = require('pg');
-const client = new Client(db);
+
 // client.connect();
 
 exports.handler = async(event, context) => {
-
+  const client = new Client(db);
   try{
     await client.connect();
   } catch(err) {
+    client.end();
     return {
       "statusCode": 500,
       "headers": {
@@ -39,17 +40,18 @@ exports.handler = async(event, context) => {
   try {
     res = await client.query(query.query, query.values);
   } catch (err) {
+    client.end();
     return {
       "statusCode": 500,
       "body": JSON.stringify(err)
     }
   }
-
+  client.end();
   return {
     "statusCode": 200,
     "headers": {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Methods": "POST"
     },
     "body": JSON.stringify({id: res.rows[0].id})
