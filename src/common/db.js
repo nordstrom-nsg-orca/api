@@ -14,6 +14,7 @@ if (process.env.NODE_ENV === 'test') {
 else {
   db = {
      host: 'nsgclouddb.clqzasuuu8wm.us-west-2.rds.amazonaws.com', // server name or IP address;
+     // host: 'nsgexternaldb.clqzasuuu8wm.us-west-2.rds.amazonaws.com',
      port: 5432,
      database: 'nsgCloudDB',
      user: 'nsg',

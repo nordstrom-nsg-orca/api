@@ -6,17 +6,24 @@ const auth = require('./common/auth.js');
 
 const { Client } = require('pg');
 const client = new Client(db);
-client.connect();
+// client.connect();
 
 exports.handler = async(event, context) => {
-  // let token = await auth.verifyToken(event.headers.Authorization);
-  // if (!token.valid) {
-  //   return {
-  //     "statusCode": 403,
-  //     "body": JSON.stringify({"msg": "token invalid"})
-  //   }
-  // }
-  // console.log(event);
+
+  try{
+    await client.connect();
+  } catch(err) {
+    return {
+      "statusCode": 500,
+      "headers": {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Allow-Methods": "POST"
+      },
+      "body": JSON.stringify({msg: 'Failed to connect to database.'})
+    }
+  }
+
   const table = event.pathParameters.table;
   const body = JSON.parse(event.body);
   const schema = await Schema.build(client, table, 'create');
