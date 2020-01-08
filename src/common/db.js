@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({path: '../../.env'});
 let db;
 if (process.env.NODE_ENV === 'test') {
   db = {
@@ -21,5 +21,5 @@ else {
      query_timeout: 5500
  };
 }
-
+// console.log(db);
 module.exports = db;
