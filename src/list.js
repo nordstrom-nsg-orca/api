@@ -3,20 +3,11 @@
 const db = require('./common/db.js');
 const corsHeaders = require('./common/headers.js');
 const auth = require('./common/auth.js');
-
 const { Client } = require('pg');
 const client = new Client(db);
 client.connect();
 
 exports.handler = async(event, context) => {
-  // console.log(event);
-  // let token = await auth.verifyToken(event.headers.Authorization);
-  // if (!token.valid) {
-  //   return {
-  //     "statusCode": 403,
-  //     "body": JSON.stringify({"msg": "token invalid"})
-  //   }
-  // }
 
   const query = `SELECT * FROM ${event.pathParameters.table}`;
   // console.log(query);
@@ -34,8 +25,8 @@ exports.handler = async(event, context) => {
   return {
     "statusCode": 200,
     "headers": {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Methods": "GET"
     },
     "body": JSON.stringify(res.rows)

@@ -7,6 +7,8 @@ provider:
   region: us-west-2
   stage: ${opt:stage, 'nonprod'}
   runtime: nodejs10.x
+  apiKeys:
+    - cloudDBAPI
   tags:
     name: ${self:service}-${self:provider.stage}
   vpc:
@@ -15,6 +17,11 @@ provider:
     subnetIds:
       - subnet-0126fe03fa91a38de
       - subnet-0386f8ab22bd7a664
+  environment:
+    NSG_DB_URL: nsgclouddb.clqzasuuu8wm.us-west-2.rds.amazonaws.com
+    NSG_DB_USER: ${env:DB_USER}
+    NSG_DB_PSSW: ${env:DB_PWD}
+    NSG_DB_NAME: nsgCloudDB
 
 package:
   individually: true
@@ -27,7 +34,7 @@ functions:
           method: GET
           path: api/{table}
           cors: true
-
+          private: true
   create:
     handler: src/create.handler
     events:
@@ -35,6 +42,7 @@ functions:
           method: POST
           path: api/{table}
           cors: true
+          private: true
   update:
     handler: src/update.handler
     events:
@@ -42,12 +50,22 @@ functions:
           method: PUT
           path: api/{table}/{id}
           cors: true
+          private: true
   delete:
     handler: src/delete.handler
     events:
       - http:
           method: DELETE
           path: api/{table}/{id}
+          cors: true
+          private: true
+
+  retrieveKey:
+    handler: src/retrieveKey.handler
+    events:
+      - http:
+          method: GET
+          path: api/retrieveKey
           cors: true
 
 

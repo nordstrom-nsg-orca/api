@@ -12,10 +12,11 @@
     "pg-promise": "^10.3.2",
     "serverless-webpack": "^5.3.1",
     "uuid": "^3.3.3",
-    "webpack": "^4.41.2"
+    "webpack": "^4.41.2",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "aws-sdk": "^2.596.0",
+    "aws-sdk": "^2.599.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.2",
