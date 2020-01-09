@@ -7,8 +7,9 @@ if (process.env.NODE_ENV === 'test') {
       port: 5432,
       database: 'nsgExternalDB',
       user: 'nsg',
-      password: process.env.NSG_DB_PASS ,
-      query_timeout: 5500
+      password: process.env.NSG_DB_PASS,
+      // query_timeout: 5500
+      connectionTimeoutMillis: 2000
   };
 }
 else {
@@ -19,7 +20,8 @@ else {
      database: 'nsgCloudDB',
      user: 'nsg',
      password: process.env.NSG_DB_PASS,
-     query_timeout: 5500
+     // query_timeout: 5500
+     connectionTimeoutMillis: 2000
  };
 }
 module.exports = db;

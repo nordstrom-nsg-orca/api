@@ -4,16 +4,17 @@ const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const auth = require('./common/auth.js');
 
-const { Client } = require('pg');
-
-// client.connect();
+// const { Client } = require('pg');
+const Pool = require('pg-pool')
 
 exports.handler = async(event, context) => {
-  const client = new Client(db);
+  // const client = new Client(db);
+  const pool = new Pool(db);
+  let client;
   try{
-    await client.connect();
+    client = await pool.connect();
   } catch(err) {
-    client.end();
+    await pool.end();
     return {
       "statusCode": 500,
       "headers": {
@@ -40,13 +41,14 @@ exports.handler = async(event, context) => {
   try {
     res = await client.query(query.query, query.values);
   } catch (err) {
-    client.end();
+    await pool.end();
     return {
       "statusCode": 500,
       "body": JSON.stringify(err)
     }
   }
-  client.end();
+  await client.release();
+  await pool.end();
   return {
     "statusCode": 200,
     "headers": {

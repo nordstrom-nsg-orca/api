@@ -9,6 +9,7 @@
     "dotenv": "^8.2.0",
     "jsonschema": "^1.2.5",
     "pg": "^7.17.0",
+    "pg-pool": "^2.0.9",
     "pg-promise": "^10.3.2",
     "serverless-webpack": "^5.3.1",
     "uuid": "^3.3.3",
