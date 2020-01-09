@@ -1,4 +1,3 @@
-
 // this maps from PSQL => jsonschema
 module.exports =  {
   "integer": "integer",

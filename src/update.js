@@ -4,23 +4,32 @@ const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const auth = require('./common/auth.js');
 
-const { Client } = require('pg');
-const client = new Client(db);
-client.connect();
+// const { Client } = require('pg');
+const Pool = require('pg-pool')
 
 exports.handler = async(event, context) => {
-  let token = await auth.verifyToken(event.headers.Authorization);
-  if (!token.valid) {
+
+  // const client = new Client(db);
+  const pool = new Pool(db);
+  let client;
+  try{
+    client = await pool.connect();
+  } catch(err) {
+    await pool.end();
     return {
-      "statusCode": 403,
-      "body": JSON.stringify({"msg": "token invalid"})
+      "statusCode": 500,
+      "headers": {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Allow-Methods": "PUT"
+      },
+      "body": JSON.stringify({msg: 'Failed to connect to database.'})
     }
   }
 
   const table = event.pathParameters.table;
   const id = event.pathParameters.id;
   const body = JSON.parse(event.body);
-
   const schema = await Schema.build(client, table, 'update');
   const valid = Schema.validate(body, schema, 'update');
   if (!valid.valid)
@@ -35,17 +44,19 @@ exports.handler = async(event, context) => {
   try {
     res = await client.query(query.query, query.values);
   } catch (err) {
+    await pool.end();
     return {
       "statusCode": 500,
       "body": JSON.stringify(err)
     }
   }
-
+  await client.release();
+  await pool.end();
   return {
     "statusCode": 200,
     "headers": {
-      "Access-Control-Allow-Origin": "http://localhost:3000",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*",
       "Access-Control-Allow-Methods": "PUT"
     }
   }
@@ -68,5 +79,4 @@ function buildQuery(id, table, schema, body) {
     query: `${query}${cols} WHERE id = $${i} RETURNING id`,
     values: valsArr
   }
-
 }

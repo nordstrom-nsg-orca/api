@@ -2,4 +2,5 @@
 .serverless/
 node_modules/
 .webpack/
-db.js
+.env
+token.json

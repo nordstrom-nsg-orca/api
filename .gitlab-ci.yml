@@ -1,0 +1,16 @@
+stages:
+  - test
+
+test:
+  stage: test
+  image: node:latest
+  before_script:
+    - npm install
+  script:
+    - export NODE_ENV=test
+    - export NSG_DB_PASS=$NSG_DB_PASS
+    - npm test
+  only:
+    - merge_requests
+
+# deploy to AWS below?
