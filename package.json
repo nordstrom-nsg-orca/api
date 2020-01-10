@@ -34,10 +34,10 @@
     "deploy-storage": "cd storage && npm run sls-deploy",
     "remove-api": "cd api && npm run sls-remove",
     "remove-storage": "cd storage && npm run sls-remove",
-    "test-create": "aws-okta exec nonprod -- npx sls invoke local --function create --path test/create.json",
-    "test-delete": "aws-okta exec nonprod -- npx sls invoke local --function delete --path test/delete.json",
-    "test-update": "aws-okta exec nonprod -- npx sls invoke local --function update --path test/update.json",
-    "test-list": "aws-okta exec nonprod -- npx sls invoke local --function list --path test/list.json"
+    "test-create": "aws-okta exec nonprod -- npx sls invoke local --function create --path test/json/create.json",
+    "test-delete": "aws-okta exec nonprod -- npx sls invoke local --function delete --path test/json/delete.json",
+    "test-update": "aws-okta exec nonprod -- npx sls invoke local --function update --path test/json/update.json",
+    "test-list": "aws-okta exec nonprod -- npx sls invoke local --function list --path test/json/list.json"
   },
   "repository": {
     "type": "git",
