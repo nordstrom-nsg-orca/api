@@ -36,7 +36,7 @@ exports.handler = async(event, context) => {
     curr = await client.query(query.query, query.values);
   } catch (err) {
     await client.end();
-    return response(400, {err: err}, headers);
+    return response(500, {err: err}, headers);
   }
 
   if (action === 'GET')
