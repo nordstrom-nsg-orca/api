@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const assert = require('assert');
-const listFunction = require('../src/list.js');
+const listFunction = require('../src/crud.js');
 const fs = require('fs');
 const fetch = require('node-fetch');
 const data = JSON.parse(fs.readFileSync('./test/json/list.json', 'utf8'));

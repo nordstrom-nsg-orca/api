@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const assert = require('assert');
-const updateFunction = require('../src/update.js');
+const updateFunction = require('../src/crud.js');
 const fs = require('fs');
 const fetch = require('node-fetch');
 const data = JSON.parse(fs.readFileSync('./test/json/update.json', 'utf8'));
@@ -14,7 +14,8 @@ describe('Testing update endpoint', () => {
   });
 
   it('Empty body request', async() => {
-    const eventData = {pathParameters: data.pathParameters, body: "{}"};
+    let eventData = data;
+    eventData.body = "{}";
     let response = await updateFunction.handler(eventData, { /* context */ });
     expect(response.statusCode).equal(500);
   });

@@ -7,7 +7,7 @@ test:
   before_script:
     - npm install
   script:
-    - export NODE_ENV=test
+    # - export NODE_ENV=test
     - export NSG_DB_PASS=$NSG_DB_PASS
     - npm test
   only:

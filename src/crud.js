@@ -4,7 +4,6 @@ const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const corsHeaders = require('./common/headers.js');
 const auth = require('./common/auth.js');
-
 const { Client } = require('pg');
 
 exports.handler = async(event, context) => {
@@ -13,9 +12,8 @@ exports.handler = async(event, context) => {
   const id = event.pathParameters.id;
   const body = JSON.parse(event.body || '{}');
   const action = event.httpMethod;
-
   const client = new Client(db);
-
+  console.log(db);
   let schema, query, curr, resp;
 
   try {
@@ -39,7 +37,7 @@ exports.handler = async(event, context) => {
     curr = await client.query(query.query, query.values);
   } catch (err) {
     await client.end();
-    return response(500, {err: err}, headers);
+    return response(400, {err: err}, headers);
   }
 
   if (action === 'GET')
