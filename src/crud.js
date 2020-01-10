@@ -2,11 +2,13 @@
 
 const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
+const corsHeaders = require('./common/headers.js');
 const auth = require('./common/auth.js');
 
 const { Client } = require('pg');
 
 exports.handler = async(event, context) => {
+  const headers = corsHeaders.verifyOrigin(event.headers.origin);
   const table = event.pathParameters.table;
   const id = event.pathParameters.id;
   const body = JSON.parse(event.body || '{}');
@@ -19,16 +21,16 @@ exports.handler = async(event, context) => {
   try {
     await client.connect();
   } catch (err) {
-    return response(500, {err: err.message});
+    return response(500, {err: err.message}, headers);
   }
-  
+
   if (['PUT', 'POST'].includes(action)) {
     schema = await Schema.build(client, table, action);
     const valid = Schema.validate(body, schema, action);
-    
+
     if (!valid.valid) {
       await client.end();
-      return response(400, {err: valid.errs});
+      return response(400, {err: valid.errs}, headers);
     }
   }
 
@@ -37,7 +39,7 @@ exports.handler = async(event, context) => {
     curr = await client.query(query.query, query.values);
   } catch (err) {
     await client.end();
-    return response(500, {err: err});
+    return response(500, {err: err}, headers);
   }
 
   if (action === 'GET')
@@ -47,18 +49,14 @@ exports.handler = async(event, context) => {
   else resp = 'ok';
 
   await client.end();
-  return response(200, resp);
+  return response(200, resp, headers);
 }
 
 
-function response(statusCode, msg) {
+function response(statusCode, msg, headers) {
   return {
     "statusCode": statusCode,
-    "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "*",
-        "Access-Control-Allow-Methods": "*"
-    },
+    "headers": headers,
     "body": JSON.stringify(msg)
   }
 }
