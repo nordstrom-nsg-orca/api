@@ -13,7 +13,6 @@ exports.handler = async(event, context) => {
   const body = JSON.parse(event.body || '{}');
   const action = event.httpMethod;
   const client = new Client(db);
-  console.log(db);
   let schema, query, curr, resp;
 
   try {
