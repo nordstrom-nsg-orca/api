@@ -19,7 +19,7 @@ else {
      port: 5432,
      database: 'nsgCloudDB',
      user: 'nsg',
-     password: process.env.NSG_DB_PASS,
+     password: 'nsgseattle',//process.env.NSG_DB_PASS,
      // query_timeout: 5500
      connectionTimeoutMillis: 2000
  };
