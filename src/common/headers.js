@@ -1,3 +1,5 @@
+const dotenv = require('dotenv');
+dotenv.config({path: '../../.env'});
 let allowedOrigins;
 if (process.env.STAGE === 'prod') {
   allowedOrigins = [

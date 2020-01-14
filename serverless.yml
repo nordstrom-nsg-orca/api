@@ -65,7 +65,6 @@ functions:
           path: api/retrieveKey
           cors: true
 
-
 custom:
   TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
   webpack:
@@ -74,3 +73,4 @@ custom:
 
 plugins:
   - serverless-webpack
+  # - serverless_swagger
