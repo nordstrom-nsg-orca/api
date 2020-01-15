@@ -49,14 +49,13 @@ module.exports.build = async (client, table, action) => {
 }
 
 module.exports.validate = (event, schema) => {
-
   const valid = validate(event, schema)
   let errs = null
 
   if (!valid.valid) {
-    errs = [];
+    errs = []
     for (var i = 0; i < valid.errors.length; i++) {
-      errs.push(valid.errors[i].message);
+      errs.push(valid.errors[i].message)
     }
   }
   return {

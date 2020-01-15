@@ -5,7 +5,6 @@ const fs = require('fs')
 const data = JSON.parse(fs.readFileSync('./test/json/update.json', 'utf8'))
 
 describe('Testing update endpoint', () => {
-
   it('Successful Update', async () => {
     const response = await updateFunction.handler(data, { /* context */ })
     expect(response.statusCode).equal(200)

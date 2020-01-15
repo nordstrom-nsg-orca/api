@@ -5,7 +5,6 @@ const fs = require('fs')
 const data = JSON.parse(fs.readFileSync('./test/json/delete.json', 'utf8'))
 
 describe('Testing delete endpoint', () => {
-
   it('Successful Delete', async () => {
     const response = await deleteFunction.handler(data, { /* context */ })
     expect(response.statusCode).equal(200)
@@ -16,5 +15,4 @@ describe('Testing delete endpoint', () => {
     const response = await deleteFunction.handler(data, { /* context */ })
     expect(response.statusCode).equal(500)
   })
-
 })

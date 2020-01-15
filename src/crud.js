@@ -80,7 +80,7 @@ function buildQuery (id, table, schema, action, body) {
     if (action === 'POST') {
       query = `INSERT INTO ${table} (${cols.join(',')}) VALUES (${valIndex.join(',')}) RETURNING id`
     } else if (action === 'PUT') {
-      query = `UPDATE ${table} SET ${cols.map((e, i) => `${e}=$${i+1}`).join(',')} WHERE id = ${id}`
+      query = `UPDATE ${table} SET ${cols.map((e, i) => `${e}=$${i + 1}`).join(',')} WHERE id = ${id}`
     }
 
     return {
