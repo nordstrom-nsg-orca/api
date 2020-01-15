@@ -1,5 +1,6 @@
 stages:
   - test
+  - lint
   - deploy
 
 test:
@@ -13,6 +14,13 @@ test:
     - npm test
   only:
     - merge_requests
+
+eslint:
+ stage: lint
+ image: node:latest
+ script:
+    - npm i eslint
+    - node_modules/eslint/bin/eslint.js .
 
 deploy:
   stage: deploy
