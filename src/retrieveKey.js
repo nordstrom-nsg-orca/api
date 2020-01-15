@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const auth = require('./common/auth.js');
 const aws = require('aws-sdk');
 const corsHeaders = require('./common/headers.js');
@@ -19,7 +19,7 @@ exports.handler = (event, context, callback) => {
         body: JSON.stringify({ msg: 'token invalid' })
       });
     }
-  })
+  });
 
   apiGateway.getApiKeys({ includeValues: true, nameQuery: 'cloudDBAPI' }, (err, data) => {
     if (err) console.log(err);
@@ -32,5 +32,5 @@ exports.handler = (event, context, callback) => {
       // callback(null, response);
       context.succeed(response);
     }
-  })
-}
+  });
+};

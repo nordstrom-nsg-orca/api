@@ -15,4 +15,4 @@ describe('Testing delete endpoint', () => {
     const response = await deleteFunction.handler(data, { /* context */ });
     expect(response.statusCode).equal(500);
   });
-})
+});

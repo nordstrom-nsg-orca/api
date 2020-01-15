@@ -14,11 +14,11 @@ module.exports.verifyToken = async (token) => {
     return {
       valid: true,
       jwt: jwt
-    }
+    };
   } catch (err) {
     return {
       valid: false,
       err: err
-    }
+    };
   }
-}
+};

@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'test') {
     user: 'nsg',
     password: process.env.NSG_DB_PASS,
     connectionTimeoutMillis: 2000
-  }
+  };
 } else {
   db = {
     host: 'nsgclouddb.clqzasuuu8wm.us-west-2.rds.amazonaws.com', // server name or IP address;
@@ -19,6 +19,6 @@ if (process.env.NODE_ENV === 'test') {
     user: 'nsg',
     password: process.env.NSG_DB_PASS,
     connectionTimeoutMillis: 2000
-  }
+  };
 }
 module.exports = db;

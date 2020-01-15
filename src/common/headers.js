@@ -17,10 +17,10 @@ module.exports.verifyOrigin = (origin) => {
   if (allowedOrigins.includes(origin)) {
     return {
       'Access-Control-Allow-Origin': origin
-    }
+    };
   } else {
     return {
       'Access-Control-Allow-Origin': allowedOrigins[0]
-    }
+    };
   }
-}
+};

@@ -2,4 +2,4 @@
 module.exports = {
   integer: 'integer',
   'character varying': 'string'
-}
+};

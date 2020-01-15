@@ -4,6 +4,6 @@ module.exports.main = (event, context, callback) => {
     body: JSON.stringify({
       name: 'getApiTable'
     })
-  }
-  callback(null, response)
-}
+  };
+  callback(null, response);
+};

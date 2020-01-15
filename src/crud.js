@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const corsHeaders = require('./common/headers.js');
@@ -47,14 +47,14 @@ exports.handler = async (event, context) => {
 
   await client.end();
   return response(200, resp, headers);
-}
+};
 
 function response (statusCode, msg, headers) {
   return {
     statusCode: statusCode,
     headers: headers,
     body: JSON.stringify(msg)
-  }
+  };
 }
 
 function buildQuery (id, table, schema, action, body) {
@@ -86,7 +86,7 @@ function buildQuery (id, table, schema, action, body) {
     return {
       query: query,
       values: vals
-    }
+    };
   }
 
   return null;

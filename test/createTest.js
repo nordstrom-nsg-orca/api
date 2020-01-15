@@ -21,4 +21,4 @@ describe('Testing create endpoint', () => {
     const response = await createFunction.handler(eventData, { /* context */ });
     expect(response.statusCode).equal(400);
   });
-})
+});

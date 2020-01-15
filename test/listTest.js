@@ -16,4 +16,4 @@ describe('Testing list endpoint', () => {
     const response = await listFunction.handler(eventData, { /* context */ });
     expect(response.statusCode).equal(500);
   });
-})
+});
