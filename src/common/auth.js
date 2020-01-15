@@ -1,12 +1,12 @@
 const okta = require('@okta/jwt-verifier');
-
 const verifier = new okta({
   issuer: 'https://nordstrom.oktapreview.com/oauth2/ausmbgds36nqid3rW0h7'
-})
+});
 
-module.exports.verifyToken = async(token) => {
-  if (token.startsWith('Bearer '))
-    token = token.substr(7)
+module.exports.verifyToken = async (token) => {
+  if (token.startsWith('Bearer ')) {
+    token = token.substr(7);
+  }
 
   let jwt;
   try {

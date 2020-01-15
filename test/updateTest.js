@@ -1,29 +1,27 @@
 const chai = require('chai');
 const expect = chai.expect;
-const assert = require('assert');
 const updateFunction = require('../src/crud.js');
 const fs = require('fs');
-const fetch = require('node-fetch');
 const data = JSON.parse(fs.readFileSync('./test/json/update.json', 'utf8'));
 
 describe('Testing update endpoint', () => {
 
-  it('Successful Update', async() => {
-    let response = await updateFunction.handler(data, { /* context */ });
+  it('Successful Update', async () => {
+    const response = await updateFunction.handler(data, { /* context */ });
     expect(response.statusCode).equal(200);
   });
 
-  it('Empty body request', async() => {
-    let eventData = data;
+  it('Empty body request', async () => {
+    const eventData = data;
     eventData.body = "{}";
-    let response = await updateFunction.handler(eventData, { /* context */ });
+    const response = await updateFunction.handler(eventData, { /* context */ });
     expect(response.statusCode).equal(500);
   });
 
-  it('Bad table\'s name', async() => {
-    let eventData = data;
+  it('Bad table\'s name', async () => {
+    const eventData = data;
     eventData.pathParameters.table = 'other';
-    let response = await updateFunction.handler(eventData, { /* context */ });
+    const response = await updateFunction.handler(eventData, { /* context */ });
     expect(response.statusCode).equal(500);
   });
 

@@ -10,20 +10,20 @@ const apiGateway = new aws.APIGateway({
 });
 
 exports.handler = (event, context, callback) => {
-  let token = auth.verifyToken(event.headers.Authorization);
+  const token = auth.verifyToken(event.headers.Authorization);
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
   token.then(data => {
     if (!data.valid) {
       context.succeed({
-        "statusCode": 403,
-        "headers": headers,
-        "body": JSON.stringify({"msg": "token invalid"})
+        statusCode: 403,
+        headers: headers,
+        body: JSON.stringify({ 'msg': 'token invalid' })
       });
     }
   });
 
-  apiGateway.getApiKeys({includeValues: true, nameQuery: 'cloudDBAPI'}, (err, data) => {
-    if(err) console.log(err);
+  apiGateway.getApiKeys({ includeValues: true, nameQuery: 'cloudDBAPI' }, (err, data) => {
+    if (err) console.log(err);
     else {
       const response = {
         statusCode: 200,
@@ -34,6 +34,5 @@ exports.handler = (event, context, callback) => {
       context.succeed(response);
     }
   });
-
 
 }

@@ -1,4 +1,3 @@
-
 module.exports.main = (event, context, callback) => {
   const response = {
     statusCode: 200,
@@ -7,4 +6,4 @@ module.exports.main = (event, context, callback) => {
     }),
   };
   callback(null, response);
-};
+}
