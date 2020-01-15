@@ -17,7 +17,7 @@ describe('Testing create endpoint', () => {
   });
   it('Bad body request', async () => {
     const eventData = data;
-    eventData.body = {other:  'Testing create'};
+    eventData.body = { other: 'Testing create' };
     const response = await createFunction.handler(eventData, { /* context */ });
     expect(response.statusCode).equal(400);
   });
