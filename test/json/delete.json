@@ -2,7 +2,7 @@
 	"headers": {"origin": "http://localhost:3000"},
 	"pathParameters": {
 		"table":"access_item",
-		"id": 155
+		"id": 1
 	},
 	"httpMethod": "DELETE"
 }

@@ -1,6 +1,6 @@
 {
   "headers": {"origin": "http://localhost:3000"},
   "pathParameters": {"table": "access_item"},
-  "body": "{\"subnet\":  \"Testing create\", \"description\":  \"Testing create\", \"list_id\":  25}",
+  "body": "{\"subnet\":  \"Testing create\", \"description\":  \"Testing create\", \"list_id\":  1}",
   "httpMethod": "POST"
 }
