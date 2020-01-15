@@ -19,9 +19,9 @@ eslint:
  stage: lint
  image: node:latest
  before_script:
-    - npm install -g eslint
+    - npm install eslint
  script:
-    - eslint --init
+    - ./node_modules/.bin/eslint --init
     - node_modules/eslint/bin/eslint.js .
 
 deploy:
