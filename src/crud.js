@@ -38,18 +38,18 @@ exports.handler = async (event, context) => {
   }
 
   if (action === 'GET') {
-    resp = curr.rows;
+    resp = curr.rows
   } else if (action === 'POST') {
-    resp = curr.rows[0];
+    resp = curr.rows[0]
   } else {
-    resp = 'ok';
+    resp = 'ok'
   }
 
-  await client.end();
-  return response(200, resp, headers);
+  await client.end()
+  return response(200, resp, headers)
 }
 
-function response(statusCode, msg, headers) {
+function response (statusCode, msg, headers) {
   return {
     statusCode: statusCode,
     headers: headers,
@@ -57,30 +57,30 @@ function response(statusCode, msg, headers) {
   }
 }
 
-function buildQuery(id, table, schema, action, body) {
+function buildQuery (id, table, schema, action, body) {
   if (action === 'GET') {
     return { query: `SELECT * FROM ${table}`, values: [] }
   } else if (action === 'DELETE') {
     return { query: `DELETE FROM ${table} WHERE id = $1`, values: [id] }
   } else if (['POST', 'PUT']) {
-    let query;
-    const cols = [];
-    const valIndex = [];
-    const vals = [];
-    let i = 1;
+    let query
+    const cols = []
+    const valIndex = []
+    const vals = []
+    let i = 1
     for (const key in schema.properties) {
       if (typeof body[key] !== 'undefined') {
-        cols.push(key);
-        valIndex.push(`$${i}`);
-        vals.push(body[key]);
-        i++;
+        cols.push(key)
+        valIndex.push(`$${i}`)
+        vals.push(body[key])
+        i++
       }
     }
 
     if (action === 'POST') {
-      query = `INSERT INTO ${table} (${cols.join(',')}) VALUES (${valIndex.join(',')}) RETURNING id`;
+      query = `INSERT INTO ${table} (${cols.join(',')}) VALUES (${valIndex.join(',')}) RETURNING id`
     } else if (action === 'PUT') {
-      query = `UPDATE ${table} SET ${cols.map((e, i) => `${e}=$${i+1}`).join(',')} WHERE id = ${id}`;
+      query = `UPDATE ${table} SET ${cols.map((e, i) => `${e}=$${i+1}`).join(',')} WHERE id = ${id}`
     }
 
     return {
@@ -89,5 +89,5 @@ function buildQuery(id, table, schema, action, body) {
     }
   }
 
-  return null;
+  return null
 }

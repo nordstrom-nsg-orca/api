@@ -1,5 +1,5 @@
-const okta = require('@okta/jwt-verifier')
-const Verifier = new okta({
+const Okta = require('@okta/jwt-verifier')
+const verifier = new Okta({
   issuer: 'https://nordstrom.oktapreview.com/oauth2/ausmbgds36nqid3rW0h7'
 })
 
@@ -10,7 +10,7 @@ module.exports.verifyToken = async (token) => {
 
   let jwt
   try {
-    jwt = await Verifier.verifyAccessToken(token, 'ReactApp')
+    jwt = await verifier.verifyAccessToken(token, 'ReactApp')
     return {
       valid: true,
       jwt: jwt
