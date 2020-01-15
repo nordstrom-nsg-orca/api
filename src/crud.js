@@ -21,7 +21,6 @@ exports.handler = async (event, context) => {
   if (['PUT', 'POST'].includes(action)) {
     schema = await Schema.build(client, table, action);
     const valid = Schema.validate(body, schema, action);
-    console.log(valid);
     if (!valid.valid) {
       await client.end();
       return response(400, { err: valid.errs }, headers);
