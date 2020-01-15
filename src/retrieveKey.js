@@ -1,8 +1,7 @@
-'use strict';
-
-const auth = require('./common/auth.js');
-const aws = require('aws-sdk');
-const corsHeaders = require('./common/headers.js');
+'use strict'
+const auth = require('./common/auth.js')
+const aws = require('aws-sdk')
+const corsHeaders = require('./common/headers.js')
 
 const apiGateway = new aws.APIGateway({
   region: 'us-west-2',
@@ -17,7 +16,7 @@ exports.handler = (event, context, callback) => {
       context.succeed({
         statusCode: 403,
         headers: headers,
-        body: JSON.stringify({ 'msg': 'token invalid' })
+        body: JSON.stringify({ msg: 'token invalid' })
       });
     }
   });
@@ -28,7 +27,7 @@ exports.handler = (event, context, callback) => {
       const response = {
         statusCode: 200,
         headers: headers,
-        body: JSON.stringify({apiKey: data.items[0].value})
+        body: JSON.stringify({apiKey: data.items[0].value}) 
       }
       // callback(null, response);
       context.succeed(response);

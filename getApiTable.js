@@ -3,7 +3,7 @@ module.exports.main = (event, context, callback) => {
     statusCode: 200,
     body: JSON.stringify({
       name: 'getApiTable'
-    }),
-  };
-  callback(null, response);
+    })
+  }
+  callback(null, response)
 }

@@ -37,7 +37,7 @@ module.exports.build = async (client, table, action) => {
     if (r.constraint_name.slice(-4) === 'pkey') continue;
 
     schema.properties[r.column_name] = {
-      type: map[r.data_type];
+      type: map[r.data_type]
     }
 
     // NOT NULLs only required on creation

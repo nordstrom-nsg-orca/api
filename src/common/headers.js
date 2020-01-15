@@ -1,16 +1,16 @@
-const dotenv = require('dotenv');
-dotenv.config({ path: '../../.env' });
-let allowedOrigins;
+const dotenv = require('dotenv')
+dotenv.config({ path: '../../.env' })
+let allowedOrigins
 if (process.env.STAGE === 'prod') {
   allowedOrigins = [
     'https://nsg.nordstrom.net'
-  ];
+  ]
 } else {
   allowedOrigins = [
     'http://localhost:3000',
     'https://nsg-nonprod.nordstrom.net',
     'http://nsg-nonprod.nordstrom.net'
-  ];
+  ]
 }
 
 module.exports.verifyOrigin = (origin) => {

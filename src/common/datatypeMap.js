@@ -1,5 +1,5 @@
 // this maps from PSQL => jsonschema
 module.exports = {
-  'integer': 'integer',
+  integer: 'integer',
   'character varying': 'string'
 }
