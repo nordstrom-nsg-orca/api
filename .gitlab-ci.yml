@@ -10,6 +10,8 @@ eslint:
     - npm install eslint
  script:
     - node_modules/eslint/bin/eslint.js .
+ only:
+    - merge_requests
 
 test:
   stage: test
