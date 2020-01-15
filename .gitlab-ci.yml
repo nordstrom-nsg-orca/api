@@ -20,6 +20,7 @@ eslint:
  image: node:latest
  script:
     - npm i eslint
+    - eslint --init
     - node_modules/eslint/bin/eslint.js .
 
 deploy:
