@@ -21,7 +21,6 @@ eslint:
  before_script:
     - npm install eslint
  script:
-    - ./node_modules/.bin/eslint --init
     - node_modules/eslint/bin/eslint.js .
 
 deploy:
