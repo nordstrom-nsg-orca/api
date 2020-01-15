@@ -17,7 +17,8 @@
     },
     "rules": {
        "semi": [2, "always"],
-      "no-unused-vars": ["error", { "varsIgnorePattern": "dotenv" }, {"args": "none"}],
+      "no-unused-vars": ["error", { "varsIgnorePattern": "dotenv" }],
+      "no-unused-vars": [2, { "args": "all" }],
       "no-useless-escape": "off"
     }
 }
