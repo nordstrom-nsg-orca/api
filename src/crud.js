@@ -3,6 +3,7 @@ const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const corsHeaders = require('./common/headers.js');
 const { Client } = require('pg');
+
 exports.handler = async (event, context) => {
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
   const table = event.pathParameters.table;
