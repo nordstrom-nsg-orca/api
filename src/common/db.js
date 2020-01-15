@@ -1,5 +1,5 @@
-const dotenv = require('dotenv');
-dotenv.config({ path: '../../.env' });
+const dotenv = require('dotenv').config();
+// dotenv.config({ path: '../../.env' });
 let db;
 if (process.env.NODE_ENV === 'test') {
   db = {

@@ -10,15 +10,17 @@ describe('Testing update endpoint', () => {
     expect(response.statusCode).equal(200);
   });
   it('Empty body request', async () => {
-    const eventData = data;
+    const eventData = JSON.parse(JSON.stringify(data));
     eventData.body = '{}';
     const response = await updateFunction.handler(eventData, { /* context */ });
+    console.log(response);
     expect(response.statusCode).equal(500);
   });
   it('Bad table\'s name', async () => {
-    const eventData = data;
+    const eventData =  JSON.parse(JSON.stringify(data));
     eventData.pathParameters.table = 'other';
     const response = await updateFunction.handler(eventData, { /* context */ });
+    console.log(response);
     expect(response.statusCode).equal(500);
   });
 });

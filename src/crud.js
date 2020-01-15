@@ -3,7 +3,6 @@ const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const corsHeaders = require('./common/headers.js');
 const { Client } = require('pg');
-
 exports.handler = async (event, context) => {
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
   const table = event.pathParameters.table;
@@ -22,7 +21,7 @@ exports.handler = async (event, context) => {
   if (['PUT', 'POST'].includes(action)) {
     schema = await Schema.build(client, table, action);
     const valid = Schema.validate(body, schema, action);
-
+    console.log(valid);
     if (!valid.valid) {
       await client.end();
       return response(400, { err: valid.errs }, headers);
