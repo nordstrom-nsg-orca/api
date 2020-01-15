@@ -1,6 +1,6 @@
-const dotenv = require('dotenv')
-dotenv.config({ path: '../../.env' })
-let db
+const dotenv = require('dotenv');
+dotenv.config({ path: '../../.env' });
+let db;
 if (process.env.NODE_ENV === 'test') {
   db = {
     host: 'nsgexternaldb.clqzasuuu8wm.us-west-2.rds.amazonaws.com', // server name or IP address;
@@ -21,4 +21,4 @@ if (process.env.NODE_ENV === 'test') {
     connectionTimeoutMillis: 2000
   }
 }
-module.exports = db
+module.exports = db;
