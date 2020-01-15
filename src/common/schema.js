@@ -46,7 +46,7 @@ module.exports.build = async (client, table, action) => {
     }
   }
   return schema;
-}
+};
 
 module.exports.validate = (event, schema) => {
   const valid = validate(event, schema);

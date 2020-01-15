@@ -62,7 +62,7 @@ function buildQuery (id, table, schema, action, body) {
     return { query: `SELECT * FROM ${table}`, values: [] };
   } else if (action === 'DELETE') {
     return { query: `DELETE FROM ${table} WHERE id = $1`, values: [id] };
-  } else if (['POST', 'PUT']) {
+  } else if (action === 'PUT' || action === 'POST') {
     let query;
     const cols = [];
     const valIndex = [];

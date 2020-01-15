@@ -11,7 +11,7 @@ describe('Testing update endpoint', () => {
   });
   it('Empty body request', async () => {
     const eventData = data;
-    eventData.body = "{}";
+    eventData.body = '{}';
     const response = await updateFunction.handler(eventData, { /* context */ });
     expect(response.statusCode).equal(500);
   });
