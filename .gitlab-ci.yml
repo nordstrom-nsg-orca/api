@@ -10,8 +10,8 @@ eslint:
     - npm install eslint
  script:
     - node_modules/eslint/bin/eslint.js .
- # only:
- #    - merge_requests
+ only:
+    - merge_requests
 
 test:
   stage: test
@@ -22,8 +22,8 @@ test:
     - export NODE_ENV=test
     - export NSG_DB_PASS=$NSG_DB_PASS
     - npm test
-  # only:
-  #   - merge_requests
+  only:
+    - merge_requests
 
 deploy:
   stage: deploy

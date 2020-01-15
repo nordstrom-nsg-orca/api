@@ -13,14 +13,12 @@ describe('Testing update endpoint', () => {
     const eventData = JSON.parse(JSON.stringify(data));
     eventData.body = '{}';
     const response = await updateFunction.handler(eventData, { /* context */ });
-    console.log(response);
     expect(response.statusCode).equal(500);
   });
   it('Bad table\'s name', async () => {
     const eventData = JSON.parse(JSON.stringify(data));
     eventData.pathParameters.table = 'other';
     const response = await updateFunction.handler(eventData, { /* context */ });
-    console.log(response);
     expect(response.statusCode).equal(500);
   });
 });
