@@ -18,17 +18,14 @@ provider:
       - subnet-0126fe03fa91a38de
       - subnet-0386f8ab22bd7a664
   environment:
-    NSG_DB_URL: nsgclouddb.clqzasuuu8wm.us-west-2.rds.amazonaws.com
-    NSG_DB_USER: ${env:DB_USER}
-    NSG_DB_PSSW: ${env:DB_PWD}
-    NSG_DB_NAME: nsgCloudDB
+    NSG_DB_PASS: ${env:NSG_DB_PASS}
 
 package:
   individually: true
 
 functions:
   list:
-    handler: src/list.handler
+    handler: src/crud.handler
     events:
       - http:
           method: GET
@@ -36,7 +33,7 @@ functions:
           cors: true
           private: true
   create:
-    handler: src/create.handler
+    handler: src/crud.handler
     events:
       - http:
           method: POST
@@ -44,7 +41,7 @@ functions:
           cors: true
           private: true
   update:
-    handler: src/update.handler
+    handler: src/crud.handler
     events:
       - http:
           method: PUT
@@ -52,7 +49,7 @@ functions:
           cors: true
           private: true
   delete:
-    handler: src/delete.handler
+    handler: src/crud.handler
     events:
       - http:
           method: DELETE
@@ -68,7 +65,6 @@ functions:
           path: api/retrieveKey
           cors: true
 
-
 custom:
   TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
   webpack:
@@ -77,3 +73,4 @@ custom:
 
 plugins:
   - serverless-webpack
+  # - serverless_swagger

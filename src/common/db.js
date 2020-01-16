@@ -1,25 +1,24 @@
-const dotenv = require('dotenv');
-dotenv.config({path: '../../.env'});
+const dotenv = require('dotenv').config();
+// dotenv.config({ path: '../../.env' });
 let db;
 if (process.env.NODE_ENV === 'test') {
   db = {
-      host: process.env.NSG_DB_TEST_URL, // server name or IP address;
-      port: 5432,
-      database: process.env.NSG_TEST_DB_NAME,
-      user: process.env.NSG_DB_USER,
-      password: process.env.NSG_DB_PSSW,
-      query_timeout: 5500
+    host: 'nsgexternaldb.clqzasuuu8wm.us-west-2.rds.amazonaws.com', // server name or IP address;
+    port: 5432,
+    database: 'nsgExternalDB',
+    user: 'nsg',
+    password: process.env.NSG_DB_PASS,
+    connectionTimeoutMillis: 2000
+  };
+} else {
+  db = {
+    host: 'nsgclouddb.clqzasuuu8wm.us-west-2.rds.amazonaws.com', // server name or IP address;
+    // host: 'nsgexternaldb.clqzasuuu8wm.us-west-2.rds.amazonaws.com',
+    port: 5432,
+    database: 'nsgCloudDB',
+    user: 'nsg',
+    password: process.env.NSG_DB_PASS,
+    connectionTimeoutMillis: 2000
   };
 }
-else {
-  db = {
-     host: process.env.NSG_DB_URL, // server name or IP address;
-     port: 5432,
-     database: process.env.NSG_DB_NAME,
-     user: process.env.NSG_DB_USER,
-     password: process.env.NSG_DB_PSSW,
-     query_timeout: 5500
- };
-}
-// console.log(db);
 module.exports = db;
