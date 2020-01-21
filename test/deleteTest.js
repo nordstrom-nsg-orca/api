@@ -1,15 +1,15 @@
 const chai = require('chai');
 const expect = chai.expect;
 const deleteFunction = require('../src/crud.js');
-const fs = require('fs');
+// const fs = require('fs');
 // const data = JSON.parse(fs.readFileSync('./test/json/delete.json', 'utf8'));
-const data =  {
+const data = {
 	headers: { origin: "http://localhost:3000" },
 	pathParameters: {
-		table:"access_item",
+		table: "access_item",
 		id: 1
- },
-	httpMethod: "DELETE"
+	},
+	httpMethod: 'DELETE'
 };
 describe('Testing delete endpoint', () => {
   it('Successful Delete', async () => {
