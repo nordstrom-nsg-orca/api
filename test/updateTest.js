@@ -4,9 +4,9 @@ const updateFunction = require('../src/crud.js');
 // const fs = require('fs');
 // const data = JSON.parse(fs.readFileSync('./test/json/update.json', 'utf8'));
 const data = {
-  headers: { origin: "http://localhost:3000" },
-  pathParameters: { table: access_item, id: 38 },
-  body: "{\"subnet\": \"still testing\"}",
+  headers: { origin: 'http://localhost:3000' },
+  pathParameters: { table: 'access_item', id: 38 },
+  body: '{\"subnet\": \"still testing\"}',
   httpMethod: 'PUT'
 };
 
