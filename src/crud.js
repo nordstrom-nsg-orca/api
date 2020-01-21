@@ -1,4 +1,5 @@
 'use strict';
+
 const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const corsHeaders = require('./common/headers.js');
@@ -11,14 +12,17 @@ exports.handler = async (event, context) => {
   const body = JSON.parse(event.body || '{}');
   const action = event.httpMethod;
   const client = new Client(db);
+
   let schema, curr, resp;
 
+  // attempt connection to database
   try {
     await client.connect();
   } catch (err) {
     return response(500, { err: err.message }, headers);
   }
 
+  // require schema validation on PUT and POST
   if (['PUT', 'POST'].includes(action)) {
     schema = await Schema.build(client, table, action);
     const valid = Schema.validate(body, schema, action);
@@ -28,26 +32,27 @@ exports.handler = async (event, context) => {
     }
   }
 
+  // build and attempt the query
   const query = buildQuery(id, table, schema, action, body);
+
   try {
     curr = await client.query(query.query, query.values);
   } catch (err) {
     await client.end();
-    return response(500, { err: err }, headers);
+    return response(400, { err: err }, headers);
   }
 
-  if (action === 'GET') {
+  if (action === 'GET')
     resp = curr.rows;
-  } else if (action === 'POST') {
+  else if (action === 'POST')
     resp = curr.rows[0];
-  } else {
-    resp = 'ok';
-  }
+  else resp = 'ok';
 
   await client.end();
   return response(200, resp, headers);
 };
 
+// response builder helper function
 function response (statusCode, msg, headers) {
   return {
     statusCode: statusCode,
@@ -56,17 +61,22 @@ function response (statusCode, msg, headers) {
   };
 }
 
+// builds the SQL query based on the action and schema
 function buildQuery (id, table, schema, action, body) {
-  if (action === 'GET') {
+  // GET and DELETES are very straighforward
+  if (action === 'GET')
     return { query: `SELECT * FROM ${table}`, values: [] };
-  } else if (action === 'DELETE') {
+  else if (action === 'DELETE')
     return { query: `DELETE FROM ${table} WHERE id = $1`, values: [id] };
-  } else if (action === 'PUT' || action === 'POST') {
+
+  // PUT and POST require the schema to build column and value arrays
+  else if (action === 'PUT' || action === 'POST') {
     let query;
     const cols = [];
     const valIndex = [];
     const vals = [];
     let i = 1;
+
     for (const key in schema.properties) {
       if (typeof body[key] !== 'undefined') {
         cols.push(key);
@@ -76,11 +86,13 @@ function buildQuery (id, table, schema, action, body) {
       }
     }
 
-    if (action === 'POST') {
+    // use arrays to build '(col1,col2) VALUES ($1, $2)'
+    if (action === 'POST')
       query = `INSERT INTO ${table} (${cols.join(',')}) VALUES (${valIndex.join(',')}) RETURNING id`;
-    } else if (action === 'PUT') {
+
+    // use arrays to build `SET col1=$1, col2=$2`
+    else if (action === 'PUT')
       query = `UPDATE ${table} SET ${cols.map((e, i) => `${e}=$${i + 1}`).join(',')} WHERE id = ${id}`;
-    }
 
     return {
       query: query,

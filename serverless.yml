@@ -18,7 +18,7 @@ provider:
       - subnet-0126fe03fa91a38de
       - subnet-0386f8ab22bd7a664
   environment:
-    NSG_DB_PASS: ${env:NSG_DB_PASS}
+    NSG_DB_PASS: ${env:DB_PWD}
 
 package:
   individually: true
@@ -29,7 +29,7 @@ functions:
     events:
       - http:
           method: GET
-          path: api/{table}
+          path: api/table/{table}
           cors: true
           private: true
   create:
@@ -37,7 +37,7 @@ functions:
     events:
       - http:
           method: POST
-          path: api/{table}
+          path: api/table/{table}
           cors: true
           private: true
   update:
@@ -45,7 +45,7 @@ functions:
     events:
       - http:
           method: PUT
-          path: api/{table}/{id}
+          path: api/table/{table}/{id}
           cors: true
           private: true
   delete:
@@ -53,23 +53,34 @@ functions:
     events:
       - http:
           method: DELETE
-          path: api/{table}/{id}
+          path: api/table/{table}/{id}
           cors: true
           private: true
 
-  retrieveKey:
-    handler: src/retrieveKey.handler
+  token:
+    handler: src/token.handler
     events:
       - http:
           method: GET
-          path: api/retrieveKey
+          path: api/token
           cors: true
+
 
 custom:
   TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
   webpack:
     webpackConfig: webpack.config.js
     includeModules: false
+
+resources:
+  Outputs:
+    ApiUrl:
+      Description: "The API Gateway URL for NSG"
+      Value:
+        Fn::Join:
+          - ""
+          - - Ref: ApiGatewayRestApi
+            - ".execute-api.${self:provider.region}.amazonaws.com"
 
 plugins:
   - serverless-webpack

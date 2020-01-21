@@ -41,9 +41,8 @@ module.exports.build = async (client, table, action) => {
     };
 
     // NOT NULLs only required on creation
-    if (r.is_nullable === 'NO' && action === 'POST') {
+    if (r.is_nullable === 'NO' && action === 'POST')
       schema.required.push(r.column_name);
-    }
   }
   return schema;
 };
@@ -54,9 +53,8 @@ module.exports.validate = (event, schema) => {
 
   if (!valid.valid) {
     errs = [];
-    for (var i = 0; i < valid.errors.length; i++) {
+    for (var i = 0; i < valid.errors.length; i++)
       errs.push(valid.errors[i].message);
-    }
   }
   return {
     valid: valid.valid,
