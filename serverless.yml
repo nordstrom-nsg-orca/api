@@ -73,4 +73,3 @@ custom:
 
 plugins:
   - serverless-webpack
-  # - serverless_swagger
