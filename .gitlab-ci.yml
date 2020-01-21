@@ -35,4 +35,4 @@ deploy:
     - creds-helper -aws
     - AWS_PROFILE=arnawsiam046711174152rolensgcirole serverless deploy
   only:
-    - merge_requests
+    - master
