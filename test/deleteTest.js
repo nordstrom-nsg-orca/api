@@ -5,10 +5,7 @@ const deleteFunction = require('../src/crud.js');
 // const data = JSON.parse(fs.readFileSync('./test/json/delete.json', 'utf8'));
 const data = {
   headers: { origin: 'http://localhost:3000' },
-  pathParameters: {
-	  table: 'access_item',
-	  id: 1
-  },
+  pathParameters: { table: 'access_item', id: 1 },
   httpMethod: 'DELETE'
 };
 describe('Testing delete endpoint', () => {
