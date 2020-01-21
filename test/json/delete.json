@@ -1,7 +1,0 @@
-{
-	"pathParameters": {
-		"table":"access_item",
-		"id": 155
-	},
-	"httpMethod": "DELETE"
-}

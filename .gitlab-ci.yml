@@ -1,5 +1,17 @@
 stages:
+  - lint
   - test
+  - deploy
+
+eslint:
+ stage: lint
+ image: node:latest
+ before_script:
+    - npm install eslint
+ script:
+    - node_modules/eslint/bin/eslint.js .
+ only:
+    - merge_requests
 
 test:
   stage: test
@@ -13,4 +25,14 @@ test:
   only:
     - merge_requests
 
-# deploy to AWS below?
+deploy:
+  stage: deploy
+  image: gitlab-registry.nordstrom.com/cicd/images/incubator/artillery:unstable
+  before_script:
+    - npm install serverless
+    - npm install serverless-webpack
+  script:
+    - creds-helper -aws
+    - AWS_PROFILE=arnawsiam046711174152rolensgcirole serverless deploy
+  only:
+    - master

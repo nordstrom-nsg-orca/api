@@ -1,5 +1,0 @@
-{
-  "pathParameters": {"table": "access_item", "id": 154},
-  "body": "{\"subnet\": \"still testing\"}",
-  "httpMethod": "PUT"
-}

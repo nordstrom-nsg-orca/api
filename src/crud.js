@@ -1,79 +1,73 @@
 'use strict';
-
 const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
-const auth = require('./common/auth.js');
-
+const corsHeaders = require('./common/headers.js');
 const { Client } = require('pg');
 
-exports.handler = async(event, context) => {
+exports.handler = async (event, context) => {
+  const headers = corsHeaders.verifyOrigin(event.headers.origin);
   const table = event.pathParameters.table;
   const id = event.pathParameters.id;
   const body = JSON.parse(event.body || '{}');
   const action = event.httpMethod;
-
   const client = new Client(db);
-
-  let schema, query, curr, resp;
+  let schema, curr, resp;
 
   try {
     await client.connect();
   } catch (err) {
-    return response(500, {err: err.message});
+    return response(500, { err: err.message }, headers);
   }
-  
+
   if (['PUT', 'POST'].includes(action)) {
     schema = await Schema.build(client, table, action);
     const valid = Schema.validate(body, schema, action);
-    
     if (!valid.valid) {
       await client.end();
-      return response(400, {err: valid.errs});
+      return response(400, { err: valid.errs }, headers);
     }
   }
 
-  query = buildQuery(id, table, schema, action, body);
+  const query = buildQuery(id, table, schema, action, body);
   try {
     curr = await client.query(query.query, query.values);
   } catch (err) {
     await client.end();
-    return response(500, {err: err});
+    return response(500, { err: err }, headers);
   }
 
-  if (action === 'GET')
+  if (action === 'GET') {
     resp = curr.rows;
-  else if (action === 'POST')
+  } else if (action === 'POST') {
     resp = curr.rows[0];
-  else resp = 'ok';
+  } else {
+    resp = 'ok';
+  }
 
   await client.end();
-  return response(200, resp);
-}
+  return response(200, resp, headers);
+};
 
-
-function response(statusCode, msg) {
+function response (statusCode, msg, headers) {
   return {
-    "statusCode": statusCode,
-    "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "*",
-        "Access-Control-Allow-Methods": "*"
-    },
-    "body": JSON.stringify(msg)
-  }
+    statusCode: statusCode,
+    headers: headers,
+    body: JSON.stringify(msg)
+  };
 }
 
-
-function buildQuery(id, table, schema, action, body) {
-  if (action === 'GET')
-    return { query: `SELECT * FROM ${table}`, values: [] }
-
-  else if (action === 'DELETE')
-    return { query: `DELETE FROM ${table} WHERE id = $1`, values: [id] }
-
-  else if (['POST', 'PUT']) {
-    let query, cols=[], valIndex=[], vals=[], i=1;
-    for (let key in schema.properties) {
+function buildQuery (id, table, schema, action, body) {
+  if (action === 'GET') {
+    return { query: `SELECT * FROM ${table}`, values: [] };
+  } else if (action === 'DELETE') {
+    return { query: `DELETE FROM ${table} WHERE id = $1`, values: [id] };
+  } else if (action === 'PUT' || action === 'POST') {
+    let query;
+    const cols = [];
+    const valIndex = [];
+    const vals = [];
+    let i = 1;
+    for (const key in schema.properties) {
       if (typeof body[key] !== 'undefined') {
         cols.push(key);
         valIndex.push(`$${i}`);
@@ -82,15 +76,16 @@ function buildQuery(id, table, schema, action, body) {
       }
     }
 
-    if (action === 'POST')
+    if (action === 'POST') {
       query = `INSERT INTO ${table} (${cols.join(',')}) VALUES (${valIndex.join(',')}) RETURNING id`;
-    else if (action === 'PUT')
-      query = `UPDATE ${table} SET ${cols.map((e, i) => `${e}=$${i+1}`).join(',')} WHERE id=${id}`;
+    } else if (action === 'PUT') {
+      query = `UPDATE ${table} SET ${cols.map((e, i) => `${e}=$${i + 1}`).join(',')} WHERE id = ${id}`;
+    }
 
     return {
       query: query,
       values: vals
-    }
+    };
   }
 
   return null;

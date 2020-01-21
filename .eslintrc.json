@@ -1,0 +1,23 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "jasmine": true
+    },
+    "extends": [
+        "standard"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+      "semi": [2, "always"],
+      "no-unused-vars": ["error", {"varsIgnorePattern": "dotenv", "args": "none"}],
+      "no-useless-escape": "off"
+    }
+}

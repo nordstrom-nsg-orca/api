@@ -1,5 +1,0 @@
-{
-  "pathParameters": {"table": "access_item"},
-  "body": "{\"subnet\":  \"Testing create\", \"description\":  \"Testing create\", \"list_id\":  25}",
-  "httpMethod": "POST"
-}
