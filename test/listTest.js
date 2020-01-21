@@ -5,9 +5,9 @@ const fs = require('fs');
 // const data = JSON.parse(fs.readFileSync('./test/json/list.json', 'utf8'));
 // console.log(process.env.NODE_ENV);
 const data = {
-  "headers": {"origin": "http://localhost:3000"},
-  "httpMethod": "GET",
-  "pathParameters": {"table": "acl_view_json"}
+  headers: { origin: "http://localhost:3000" },
+  httpMethod: "GET",
+  pathParameters: { table : "acl_view_json" }
 };
 
 describe('Testing list endpoint', () => {
