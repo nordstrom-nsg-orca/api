@@ -1,9 +1,6 @@
 const chai = require('chai');
 const expect = chai.expect;
 const listFunction = require('../src/crud.js');
-// const fs = require('fs');
-// const data = JSON.parse(fs.readFileSync('./test/json/list.json', 'utf8'));
-// console.log(process.env.NODE_ENV);
 const data = {
   headers: { origin: 'http://localhost:3000' },
   httpMethod: 'GET',
