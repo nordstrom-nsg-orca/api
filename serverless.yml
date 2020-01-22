@@ -18,7 +18,7 @@ provider:
       - subnet-0126fe03fa91a38de
       - subnet-0386f8ab22bd7a664
   environment:
-    NSG_DB_PASS: ${env:DB_PWD}
+    NSG_DB_PASS: ${env:NSG_DB_PASS}
 
 package:
   individually: true
