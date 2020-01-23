@@ -74,13 +74,15 @@ custom:
 
 resources:
   Outputs:
-    ApiUrl:
+    ApiHostname:
       Description: "The API Gateway URL for NSG"
       Value:
         Fn::Join:
           - ""
           - - Ref: ApiGatewayRestApi
             - ".execute-api.${self:provider.region}.amazonaws.com"
+      Export:
+        Name: ApiHostname
 
 plugins:
   - serverless-webpack
