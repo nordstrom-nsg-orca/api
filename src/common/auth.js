@@ -4,9 +4,8 @@ const verifier = new Okta({
 });
 
 module.exports.verifyToken = async (token) => {
-  if (token.startsWith('Bearer ')) {
+  if (token.startsWith('Bearer '))
     token = token.substr(7);
-  }
 
   let jwt;
   try {
