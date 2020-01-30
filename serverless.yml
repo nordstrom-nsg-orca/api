@@ -7,8 +7,6 @@ provider:
   region: us-west-2
   stage: ${opt:stage, 'nonprod'}
   runtime: nodejs10.x
-  apiKeys:
-    - cloudDBAPI
   tags:
     name: ${self:service}-${self:provider.stage}
   vpc:
@@ -31,7 +29,6 @@ functions:
           method: GET
           path: api/table/{table}
           cors: true
-          private: true
   create:
     handler: src/crud.handler
     events:
@@ -39,7 +36,6 @@ functions:
           method: POST
           path: api/table/{table}
           cors: true
-          private: true
   update:
     handler: src/crud.handler
     events:
@@ -47,7 +43,6 @@ functions:
           method: PUT
           path: api/table/{table}/{id}
           cors: true
-          private: true
   delete:
     handler: src/crud.handler
     events:
@@ -55,16 +50,6 @@ functions:
           method: DELETE
           path: api/table/{table}/{id}
           cors: true
-          private: true
-
-  token:
-    handler: src/token.handler
-    events:
-      - http:
-          method: GET
-          path: api/token
-          cors: true
-
 
 custom:
   TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
