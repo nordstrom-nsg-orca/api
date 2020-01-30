@@ -4,11 +4,12 @@ const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const corsHeaders = require('./common/headers.js');
 const { Client } = require('pg');
+const auth = require('./common/auth.js');
 
 exports.handler = async (event, context) => {
-  let token = await auth.verifyToken(event.headers.Authorization);
+  const token = await auth.verifyToken(event.headers.Authorization);
   if (!token.valid)
-    return respond(403, "token invalid")
+    return respond(403, 'token invalid');
 
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
   const table = `orca.${event.pathParameters.table}`;
