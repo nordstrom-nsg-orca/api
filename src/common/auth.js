@@ -4,6 +4,9 @@ const verifier = new Okta({
 });
 
 module.exports.verifyToken = async (token) => {
+  if (!token)
+    return { valid: false, msg: 'no auth' };
+
   if (token.startsWith('Bearer '))
     token = token.substr(7);
 

@@ -6,13 +6,13 @@ const corsHeaders = require('./common/headers.js');
 const { Client } = require('pg');
 const auth = require('./common/auth.js');
 
-exports.handler = async (event, context) => {
+exports.handler = async (event, context, test = false) => {
   const token = await auth.verifyToken(event.headers.Authorization);
-  if (!token.valid)
+  if (!token.valid && !test)
     return respond(403, 'token invalid');
 
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
-  const table = `orca.${event.pathParameters.table}`;
+  const table = event.pathParameters.table;
   const id = event.pathParameters.id;
   const body = JSON.parse(event.body || '{}');
   const action = event.httpMethod;
@@ -68,6 +68,8 @@ function respond (statusCode, msg, headers) {
 
 // builds the SQL query based on the action and schema
 function buildQuery (id, table, schema, action, body) {
+  table = `orca.${table}`;
+
   // GET and DELETES are very straighforward
   if (action === 'GET')
     return { query: `SELECT * FROM ${table}`, values: [] };

@@ -14,7 +14,7 @@ describe('Testing create endpoint', function () {
   };
 
   it('Successful Create', async function () {
-    const response = await crud.handler(request, {});
+    const response = await crud.handler(request, {}, true);
     const body = JSON.parse(response.body);
 
     expect(response.statusCode).equal(200);
@@ -23,7 +23,7 @@ describe('Testing create endpoint', function () {
 
   it('Bad request', async function () {
     request.body = JSON.stringify({ other: 'testing' });
-    const response = await crud.handler(request, {});
+    const response = await crud.handler(request, {}, true);
     const body = JSON.parse(response.body);
 
     expect(response.statusCode).equal(400);
@@ -40,14 +40,14 @@ describe('Testing list endpoint', function () {
   };
 
   it('Successful List', async function () {
-    const response = await crud.handler(request, {});
+    const response = await crud.handler(request, {}, true);
 
     expect(response.statusCode).equal(200);
   });
 
   it('Bad table\'s name', async function () {
     request.pathParameters.table = 'other';
-    const response = await crud.handler(request, {});
+    const response = await crud.handler(request, {}, true);
 
     expect(response.statusCode).equal(400);
   });
@@ -63,11 +63,11 @@ describe('Testing update endpoint', function () {
 
   it('Successful Update', async function () {
     const req = { headers: headers, pathParameters: { table: table }, httpMethod: 'GET' };
-    const res = await crud.handler(req, {});
+    const res = await crud.handler(req, {}, true);
     const id = JSON.parse(res.body)[0].id;
 
     request.pathParameters.id = id;
-    const response = await crud.handler(request, {});
+    const response = await crud.handler(request, {}, true);
 
     expect(response.statusCode).equal(200);
   });
@@ -86,7 +86,7 @@ describe('Testing delete endpoint', function () {
     const id = JSON.parse(res.body)[0].id;
 
     request.pathParameters.id = id;
-    const response = await crud.handler(request, {});
+    const response = await crud.handler(request, {}, true);
 
     expect(response.statusCode).equal(200);
   });
