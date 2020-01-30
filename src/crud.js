@@ -4,22 +4,27 @@ const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const corsHeaders = require('./common/headers.js');
 const { Client } = require('pg');
+const auth = require('./common/auth.js');
 
 exports.handler = async (event, context) => {
+  const token = await auth.verifyToken(event.headers.Authorization);
+  if (!token.valid)
+    return respond(403, 'token invalid');
+
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
-  const table = event.pathParameters.table;
+  const table = `orca.${event.pathParameters.table}`;
   const id = event.pathParameters.id;
   const body = JSON.parse(event.body || '{}');
   const action = event.httpMethod;
   const client = new Client(db);
 
-  let schema, curr, resp;
+  let schema, cursor, resp;
 
   // attempt connection to database
   try {
     await client.connect();
   } catch (err) {
-    return response(500, { err: err.message }, headers);
+    return respond(500, { err: err.message }, headers);
   }
 
   // require schema validation on PUT and POST
@@ -28,7 +33,7 @@ exports.handler = async (event, context) => {
     const valid = Schema.validate(body, schema, action);
     if (!valid.valid) {
       await client.end();
-      return response(400, { err: valid.errs }, headers);
+      return respond(400, { err: valid.errs }, headers);
     }
   }
 
@@ -36,24 +41,24 @@ exports.handler = async (event, context) => {
   const query = buildQuery(id, table, schema, action, body);
 
   try {
-    curr = await client.query(query.query, query.values);
+    cursor = await client.query(query.query, query.values);
   } catch (err) {
     await client.end();
-    return response(400, { err: err }, headers);
+    return respond(400, { err: err }, headers);
   }
 
   if (action === 'GET')
-    resp = curr.rows;
+    resp = cursor.rows;
   else if (action === 'POST')
-    resp = curr.rows[0];
+    resp = cursor.rows[0];
   else resp = 'ok';
 
   await client.end();
-  return response(200, resp, headers);
+  return respond(200, resp, headers);
 };
 
 // response builder helper function
-function response (statusCode, msg, headers) {
+function respond (statusCode, msg, headers) {
   return {
     statusCode: statusCode,
     headers: headers,
