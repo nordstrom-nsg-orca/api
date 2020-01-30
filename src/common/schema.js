@@ -1,6 +1,6 @@
 const validate = require('jsonschema').validate;
 const map = require('./datatypeMap.js');
-// hi sudeep
+
 // queries the psql metadata to get column information to build jsonschema
 module.exports.build = async (client, table, action) => {
   const query = `
