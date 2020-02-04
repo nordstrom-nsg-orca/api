@@ -13,9 +13,10 @@ exports.handler = async (event, context, callback, test = false) => {
   console.log(event.headers);
   console.log(test);
   console.log((test === false));
+  console.log((!token.valid && test === false));
   console.log(token);
 
-  if (!token.valid && test !== false)
+  if (!token.valid && test === false)
     return respond(403, 'token invalid');
 
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
