@@ -8,6 +8,12 @@ const auth = require('./common/auth.js');
 
 exports.handler = async (event, context, test = false) => {
   const token = await auth.verifyToken(event.headers.Authorization);
+  
+
+  console.log(event.headers);
+  console.log(test);
+  console.log(token);
+  
   if (!token.valid && !test)
     return respond(403, 'token invalid');
 
