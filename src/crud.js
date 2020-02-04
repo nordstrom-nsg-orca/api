@@ -6,9 +6,10 @@ const corsHeaders = require('./common/headers.js');
 const { Client } = require('pg');
 const auth = require('./common/auth.js');
 
-exports.handler = async (event, context, test = false) => {
+exports.handler = async (event, context, callback, test = false) => {
   const token = await auth.verifyToken(event.headers.Authorization);
-  if (!token.valid && !test)
+
+  if (!token.valid && test === false)
     return respond(403, 'token invalid');
 
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
