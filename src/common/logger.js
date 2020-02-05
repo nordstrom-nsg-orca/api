@@ -2,7 +2,7 @@ const SplunkLogger = require('splunk-logging').Logger;
 
 const config = {
   url: 'http-inputs-nordstrom.splunkcloud.com',
-  token: process.env.SPLUNK_TOKEN,
+  token: `${process.env.SPLUNK_TOKEN}`,
   port: 443
 };
 
