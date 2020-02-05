@@ -1,5 +1,9 @@
 const validate = require('jsonschema').validate;
-const map = require('./datatypeMap.js');
+
+const map = {
+  integer: 'integer',
+  'character varying': 'string'
+};
 
 // queries the psql metadata to get column information to build jsonschema
 module.exports.build = async (client, table, action) => {
