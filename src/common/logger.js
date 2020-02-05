@@ -18,9 +18,9 @@ module.exports.log = (message, severity = 'info') => {
     message: message,
     metadata: metadata,
     severity: severity
-  }
-  Logger.send(payload, function(err, resp, body) {
+  };
+  Logger.send(payload, function (err, resp, body) {
     if (err)
       console.log(err);
   });
-}
+};
