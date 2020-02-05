@@ -75,7 +75,6 @@ exports.handler = async (event, context, callback, test = false) => {
 function respond (statusCode, msg, headers, logPayload) {
   logPayload.statusCode = statusCode;
   const severity = statusCode === 200 ? 'info' : 'error';
-  console.log(logPayload);
   log(logPayload, severity);
 
   return {
