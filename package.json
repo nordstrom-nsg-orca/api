@@ -13,6 +13,7 @@
     "pg-promise": "^10.3.2",
     "serverless-webpack": "^5.3.1",
     "serverless_swagger": "^1.0.3",
+    "splunk-logging": "^0.10.1",
     "uuid": "^3.3.3",
     "webpack": "^4.41.2",
     "xml2js": "^0.4.23"
