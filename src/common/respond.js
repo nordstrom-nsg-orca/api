@@ -9,4 +9,4 @@ module.exports.respond = (statusCode, msg, headers, logPayload) => {
     headers: headers,
     body: JSON.stringify(msg)
   };
-}
+};
