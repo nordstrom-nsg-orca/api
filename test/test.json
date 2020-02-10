@@ -1,0 +1,9 @@
+{
+  "headers": {
+    "Authorization": "Bearer undefined"
+  },
+  "httpMethod": "GET",
+  "pathParameters": {
+    "table": "acl_view_json"
+  }
+}
