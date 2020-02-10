@@ -35,7 +35,7 @@ exports.handler = async (event, context, callback, test = false) => {
   response = await getPermissions('nsg', process.env.NSG_DB_PASS);
   statusCode = response.status;
   if (statusCode !== 200) {
-    logPayload.err = response..statusText;
+    logPayload.err = response.statusText;
     return responder.respond(statusCode, { 'msg': response.statusText }, headers, logPayload);
   }
   const permissions = await response.json();
