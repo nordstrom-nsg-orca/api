@@ -3,9 +3,9 @@
 const Schema = require('./common/schema.js');
 const db = require('./common/db.js');
 const corsHeaders = require('./common/headers.js');
+const responder = require('./common/respond.js');
 const { Client } = require('pg');
 const auth = require('./common/auth.js');
-const { log } = require('./common/logger.js');
 
 exports.handler = async (event, context, callback, test = false) => {
   const table = event.pathParameters.table;
@@ -25,7 +25,7 @@ exports.handler = async (event, context, callback, test = false) => {
 
   if (!token.valid && test === false) {
     logPayload.error = token.err.name + ' ' + token.err.userMessage;
-    return respond(403, 'token error', headers, logPayload);
+    return responder.respond(403, 'token error', headers, logPayload);
   } else
     logPayload.user = token.jwt.claims.sub;
 
@@ -34,7 +34,7 @@ exports.handler = async (event, context, callback, test = false) => {
     await client.connect();
   } catch (err) {
     logPayload.error = err.message;
-    return respond(500, 'database connection error', headers, logPayload);
+    return responder.respond(500, 'database connection error', headers, logPayload);
   }
 
   // require schema validation on PUT and POST
@@ -45,7 +45,7 @@ exports.handler = async (event, context, callback, test = false) => {
       logPayload.error = `schema error ${valid.errs}`;
       logPayload.schema = schema;
       await client.end();
-      return respond(400, 'schema error', headers, logPayload);
+      return responder.respond(400, 'schema error', headers, logPayload);
     }
   }
 
@@ -58,7 +58,7 @@ exports.handler = async (event, context, callback, test = false) => {
   } catch (err) {
     logPayload.error = err;
     await client.end();
-    return respond(400, 'query error', headers, logPayload);
+    return responder.respond(400, 'query error', headers, logPayload);
   }
 
   if (action === 'GET')
@@ -68,21 +68,8 @@ exports.handler = async (event, context, callback, test = false) => {
   else resp = 'ok';
 
   await client.end();
-  return respond(200, resp, headers, logPayload);
+  return responder.respond(200, resp, headers, logPayload);
 };
-
-// response builder helper function
-function respond (statusCode, msg, headers, logPayload) {
-  logPayload.statusCode = statusCode;
-  const severity = statusCode === 200 ? 'info' : 'error';
-  log(logPayload, severity);
-
-  return {
-    statusCode: statusCode,
-    headers: headers,
-    body: JSON.stringify(msg)
-  };
-}
 
 // builds the SQL query based on the action and schema
 function buildQuery (id, table, schema, action, body) {
