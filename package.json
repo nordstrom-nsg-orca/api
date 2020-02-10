@@ -39,7 +39,8 @@
     "deploy-api": "cd api && npm run sls-deploy",
     "build": "webpack",
     "test": "mocha --exit",
-    "lint": "node_modules/eslint/bin/eslint.js ."
+    "lint": "node_modules/eslint/bin/eslint.js .",
+    "test-list": "aws-okta exec nonprod -- npx sls invoke local --function list --path test/test.json"
   },
   "repository": {
     "type": "git",
