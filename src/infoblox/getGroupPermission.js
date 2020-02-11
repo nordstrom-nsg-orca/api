@@ -1,7 +1,7 @@
 'use strict';
 
 const corsHeaders = require('../common/headers.js');
-const responder = require('../common/respond.js');
+const { respond } = require('../common/respond.js');
 const auth = require('../common/auth.js');
 const fetch = require('node-fetch').default;
 const https = require('https');
@@ -18,7 +18,7 @@ exports.handler = async (event, context, callback, test = false) => {
   const logPayload = {};
   if (!token.valid && test === false) {
     logPayload.error = token.err.name + ' ' + token.err.userMessage;
-    return responder.respond(403, 'token error', headers, logPayload);
+    return respond(403, 'token error', headers, logPayload);
   } else logPayload.user = token.jwt.claims.sub;
 
   let response;
@@ -36,17 +36,17 @@ exports.handler = async (event, context, callback, test = false) => {
     key = 'permissions';
   }
 
-  if ('error' in response) return responder.respond(500, response, headers, logPayload);
+  if ('error' in response) return respond(500, response, headers, logPayload);
   const statusCode = response.status;
   if (statusCode !== 200) {
     logPayload.err = response.statusText;
-    return responder.respond(statusCode, { msg: response.statusText }, headers, logPayload);
+    return respond(statusCode, { msg: response.statusText }, headers, logPayload);
   }
   const json = await response.json();
   if (key === 'groups') results = { groups: json };
   else results = { permissions: json };
 
-  return responder.respond(200, results, headers, logPayload);
+  return respond(200, results, headers, logPayload);
 };
 
 async function request (username, password, endpoint) {
