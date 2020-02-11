@@ -12,9 +12,6 @@ const domain = 'https://infoblox.nordstrom.net/wapi/v2.10.3';
 
 exports.handler = async (event, context, callback, test = false) => {
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
-  // const headers = {
-  //   'Access-Control-Allow-Origin': 'something'
-  // };
 
   const token = await auth.verifyToken(event.headers.Authorization);
   const logPayload = {};
