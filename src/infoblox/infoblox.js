@@ -13,7 +13,12 @@ const domain = 'https://infoblox.nordstrom.net/wapi/v2.10.3';
 exports.handler = async (event, context, callback, test = false) => {
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
 
-  const path = event.path.split('/')[3];
+  let endpoint = event.pathParameters.endpoint;
+  let query = null;
+  if (event.queryStringParameters) query = event.queryStringParameters._return_fields;
+
+  if (query) endpoint += `?_return_fields=${query}`;
+  const action = event.httpMethod;
   const token = await auth.verifyToken(event.headers.Authorization);
   const logPayload = {};
   if (!token.valid && test === false) {
@@ -21,20 +26,7 @@ exports.handler = async (event, context, callback, test = false) => {
     return respond(403, 'token error', headers, logPayload);
   } else logPayload.user = token.jwt.claims.sub;
 
-  let response;
-  let endpoint;
-  let results;
-  let key;
-  if (path === 'getGroups') {
-    const fields = '_return_fields=roles,name';
-    endpoint = `/admingroup?${fields}`;
-    response = await request('nsg', process.env.NSG_DB_PASS, endpoint);
-    key = 'groups';
-  } else {
-    endpoint = '/permission';
-    response = await request('nsg', process.env.NSG_DB_PASS, endpoint);
-    key = 'permissions';
-  }
+  const response = await request('nsg', process.env.NSG_DB_PASS, endpoint, action);
 
   if ('error' in response) return respond(500, response, headers, logPayload);
   const statusCode = response.status;
@@ -43,21 +35,20 @@ exports.handler = async (event, context, callback, test = false) => {
     return respond(statusCode, { msg: response.statusText }, headers, logPayload);
   }
   const json = await response.json();
-  if (key === 'groups') results = { groups: json };
-  else results = { permissions: json };
+  const results = { data: json };
 
   return respond(200, results, headers, logPayload);
 };
 
-async function request (username, password, endpoint) {
+async function request (username, password, endpoint, action) {
   let response;
   try {
     const opts = {
-      method: 'GET',
+      method: `${action}`,
       headers: { Authorization: 'Basic ' + Buffer.from(username + ':' + password).toString('base64') },
       agent: httpsAgent
     };
-    response = await fetch(`${domain}${endpoint}`, opts);
+    response = await fetch(`${domain}/${endpoint}`, opts);
     response.shouldKeepAlive = false;
     return response;
   } catch (err) {
