@@ -13,55 +13,43 @@ const domain = 'https://infoblox.nordstrom.net/wapi/v2.10.3';
 exports.handler = async (event, context, callback, test = false) => {
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
 
+  const path = event.path.split('/')[3];
   const token = await auth.verifyToken(event.headers.Authorization);
   const logPayload = {};
   if (!token.valid && test === false) {
     logPayload.error = token.err.name + ' ' + token.err.userMessage;
     return responder.respond(403, 'token error', headers, logPayload);
-  } else
-    logPayload.user = token.jwt.claims.sub;
+  } else logPayload.user = token.jwt.claims.sub;
 
-  let response = await getGroups('nsg', 'nsgseattle');
+  let response;
+  let endpoint;
+  let results;
+  let key;
+  if (path === 'getGroups') {
+    const fields = '_return_fields=roles,name';
+    endpoint = `/admingroup?${fields}`;
+    response = await request('nsg', process.env.NSG_DB_PASS, endpoint);
+    key = 'groups';
+  } else {
+    endpoint = '/permission';
+    response = await request('nsg', process.env.NSG_DB_PASS, endpoint);
+    key = 'permissions';
+  }
+
   if ('error' in response) return responder.respond(500, response, headers, logPayload);
-  let statusCode = response.status;
+  const statusCode = response.status;
   if (statusCode !== 200) {
     logPayload.err = response.statusText;
     return responder.respond(statusCode, { msg: response.statusText }, headers, logPayload);
   }
-  const groups = await response.json();
+  const json = await response.json();
+  if (key === 'groups') results = { groups: json };
+  else results = { permissions: json };
 
-  response = await getPermissions('nsg', 'nsgseattle');
-  if ('error' in response) return responder.respond(500, response, headers, logPayload);
-  statusCode = response.status;
-  if (statusCode !== 200) {
-    logPayload.err = response.statusText;
-    return responder.respond(statusCode, { msg: response.statusText }, headers, logPayload);
-  }
-  const permissions = await response.json();
-  const results = {
-    groups: groups,
-    permissions: permissions
-  };
   return responder.respond(200, results, headers, logPayload);
 };
 
-async function getGroups (username, password) {
-  let response;
-  try {
-    const fields = '_return_fields=roles,name';
-    const opts = {
-      method: 'GET',
-      headers: { Authorization: 'Basic ' + Buffer.from(username + ':' + password).toString('base64') },
-      agent: httpsAgent
-    };
-    response = await fetch(`${domain}/admingroup?${fields}`, opts);
-    return response;
-  } catch (err) {
-    return { error: err };
-  }
-}
-
-async function getPermissions (username, password) {
+async function request (username, password, endpoint) {
   let response;
   try {
     const opts = {
@@ -69,7 +57,8 @@ async function getPermissions (username, password) {
       headers: { Authorization: 'Basic ' + Buffer.from(username + ':' + password).toString('base64') },
       agent: httpsAgent
     };
-    response = await fetch(`${domain}/permission`, opts);
+    response = await fetch(`${domain}${endpoint}`, opts);
+    response.shouldKeepAlive = false;
     return response;
   } catch (err) {
     return { error: err };
