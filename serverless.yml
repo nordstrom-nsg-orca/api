@@ -51,12 +51,13 @@ functions:
           method: DELETE
           path: api/table/{table}/{id}
           cors: true
-  getGroupPermission:
-    handler: src/infoblox/getGroupPermission.handler
+  infoblox:
+    handler: src/infoblox/infoblox.handler
+    timeout: 30
     events:
       - http:
           method: GET
-          path: api/infoblox/getGroupPermission
+          path: api/infoblox/{endpoint}
           cors: true
 
 custom:
