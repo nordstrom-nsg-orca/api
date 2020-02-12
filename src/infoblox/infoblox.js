@@ -18,7 +18,6 @@ exports.handler = async (event, context, callback, test = false) => {
   if (event.queryStringParameters) {
     const keys = Object.keys(event.queryStringParameters);
     for (const key of keys) query += event.queryStringParameters[key];
-
   };
 
   if (query !== '') endpoint += `?_return_fields=${query}`;
