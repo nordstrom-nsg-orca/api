@@ -14,10 +14,15 @@ exports.handler = async (event, context, callback, test = false) => {
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
 
   let endpoint = event.pathParameters.endpoint;
-  let query = null;
-  if (event.queryStringParameters) query = event.queryStringParameters._return_fields;
+  let query = '';
+  if (event.queryStringParameters) {
+    const keys = Object.keys(event.queryStringParameters);
+    for (const key of keys) {
+      query += event.queryStringParameters[key];
+    }
+  };
 
-  if (query) endpoint += `?_return_fields=${query}`;
+  if (query !== '') endpoint += `?_return_fields=${query}`;
   const action = event.httpMethod;
   const token = await auth.verifyToken(event.headers.Authorization);
   const logPayload = {};
