@@ -1,6 +1,6 @@
 const Okta = require('@okta/jwt-verifier');
 const verifier = new Okta({
-  issuer: 'https://nordstrom.oktapreview.com/oauth2/ausmbgds36nqid3rW0h7'
+  issuer: 'https://nordstrom.oktapreview.com/oauth2/ausg0zujx3faqpGaA0h7'
 });
 
 module.exports.verifyToken = async (token) => {
