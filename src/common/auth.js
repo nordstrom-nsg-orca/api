@@ -12,12 +12,14 @@ module.exports.verifyToken = async (token) => {
 
   let jwt;
   try {
-    jwt = await verifier.verifyAccessToken(token, 'ReactApp');
+    jwt = await verifier.verifyAccessToken(token, 'https://nordstrom.oktapreview.com/nauth-oidc-service');
+
     return {
       valid: true,
       jwt: jwt
     };
   } catch (err) {
+    console.log(err);
     return {
       valid: false,
       err: err
