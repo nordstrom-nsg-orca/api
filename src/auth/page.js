@@ -32,5 +32,5 @@ exports.handler = async (event, context, callback, test = false) => {
   }
 
   await client.end();
-  return respond(200, cursor.rows[0].get_pages);
+  return respond(200, cursor.rows[0].get_pages, headers);
 };
