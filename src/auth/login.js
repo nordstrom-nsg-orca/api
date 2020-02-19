@@ -39,7 +39,9 @@ exports.handler = async (event, context, callback) => {
     return respond(400, 'query error', headers, logPayload);
   }
 
-  if ('id' in cursor.rows[0]) return respond(200, 'Authenticated', headers, logPayload);
+  if (cursor.rows.length >= 1)
+    return respond(200, 'Authenticated', headers, logPayload);
+
   logPayload.error = 'Failed to authenticate admin user';
   return respond(403, 'Forbidden', headers, logPayload);
 };
