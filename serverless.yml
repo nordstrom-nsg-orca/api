@@ -59,6 +59,13 @@ functions:
           method: GET
           path: api/infoblox/{endpoint}
           cors: true
+  login:
+    handler: src/auth/login.handler
+    events:
+      - http:
+          method: GET
+          path: api/auth/login
+          cors: true
 
 custom:
   TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
