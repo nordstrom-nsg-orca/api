@@ -66,6 +66,13 @@ functions:
           method: GET
           path: api/auth/login
           cors: true
+  page:
+    handler: src/auth/page.handler
+    events:
+      - http:
+          method: GET
+          path: api/auth/page
+          cors: true
 
 custom:
   TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
