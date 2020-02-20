@@ -6,9 +6,7 @@ const { authorize } = require('../common/auth.js');
 
 exports.handler = async (event, context, callback) => {
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
-  const creds = event.headers.Authorization;
-
-  const auth = await authorize(creds);
+  const auth = await authorize(event.headers.Authorization);
 
   const logPayload = {};
   if (!auth.valid) {
