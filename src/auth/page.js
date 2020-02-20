@@ -4,12 +4,12 @@ const db = require('../common/db.js');
 const corsHeaders = require('../common/headers.js');
 const { respond } = require('../common/respond.js');
 const { Client } = require('pg');
-const auth = require('../common/auth.js');
+const { authorize } = require('../common/auth.js');
 
 exports.handler = async (event, context, callback, test = false) => {
   const client = new Client(db);
   const headers = corsHeaders.verifyOrigin(event.headers.origin);
-  const token = await auth.verifyToken(event.headers.Authorization);
+  const token = await authorize(event.headers.Authorization);
   let cursor;
 
   if (!token.valid && test === false)
