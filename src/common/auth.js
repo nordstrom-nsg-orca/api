@@ -10,9 +10,9 @@ module.exports.authorize = async (token) => {
   if (!token)
     return { valid: false, err: { userMessage: 'no auth' } };
 
-  if (token.startsWith('Bearer ')) {
+  if (token.startsWith('Bearer '))
     return verifyToken(token);
-  } else if (token.startsWith('Basic '))
+  else if (token.startsWith('Basic '))
     return verifyUser(token);
 };
 
@@ -33,7 +33,6 @@ async function verifyToken (token) {
     };
   }
 }
-
 
 async function verifyUser (creds) {
   if (!creds)
