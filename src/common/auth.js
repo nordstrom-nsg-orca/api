@@ -24,12 +24,13 @@ async function verifyToken (token) {
 
     return {
       valid: true,
-      jwt: jwt
+      jwt: jwt,
+      username: jwt.claims.sub
     };
   } catch (err) {
     return {
       valid: false,
-      err: err
+      err: err.name + ' ' + err.userMessage
     };
   }
 }

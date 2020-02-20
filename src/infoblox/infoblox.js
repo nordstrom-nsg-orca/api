@@ -25,17 +25,10 @@ exports.handler = async (event, context, callback, test = false) => {
   const token = await authorize(event.headers.Authorization);
   const logPayload = {};
   if (!token.valid && test === false) {
-    if ('status' in token)
-      logPayload.error = token.err;
-    else
-      logPayload.error = token.err.name + ' ' + token.err.userMessage;
+    logPayload.error = token.err;
     return respond(403, 'token error', headers, logPayload);
-  } else {
-    if ('status' in token)
-      logPayload.user = token.username;
-    else
-      logPayload.user = token.jwt.claims.sub;
-  }
+  } else
+    logPayload.user = token.username;
 
   const response = await request('nsg', process.env.NSG_DB_PASS, endpoint, action);
 
