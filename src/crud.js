@@ -24,10 +24,17 @@ exports.handler = async (event, context, callback, test = false) => {
   };
 
   if (!token.valid && test === false) {
-    logPayload.error = token.err.name + ' ' + token.err.userMessage;
+    if ('status' in token)
+      logPayload.error = token.err;
+    else
+      logPayload.error = token.err.name + ' ' + token.err.userMessage;
     return respond(403, 'token error', headers, logPayload);
-  } else
-    logPayload.user = token.jwt.claims.sub;
+  } else {
+    if ('status' in token)
+      logPayload.user = token.username;
+    else
+      logPayload.user = token.jwt.claims.sub;
+  }
 
   // attempt connection to database
   try {
