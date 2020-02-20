@@ -27,7 +27,7 @@ module.exports.verifyToken = async (token) => {
       };
     }
   } else if (token.startsWith('Basic '))
-    return verifyUser(token);
+    return await verifyUser(token);
 };
 
 async function verifyUser (creds) {
