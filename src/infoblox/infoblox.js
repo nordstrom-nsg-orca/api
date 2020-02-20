@@ -2,7 +2,7 @@
 
 const corsHeaders = require('../common/headers.js');
 const { respond } = require('../common/respond.js');
-const auth = require('../common/auth.js');
+const { authorize } = require('../common/auth.js');
 const fetch = require('node-fetch').default;
 const https = require('https');
 const httpsAgent = new https.Agent({
@@ -22,7 +22,7 @@ exports.handler = async (event, context, callback, test = false) => {
 
   if (query !== '') endpoint += `?_return_fields=${query}`;
   const action = event.httpMethod;
-  const token = await auth.verifyToken(event.headers.Authorization);
+  const token = await authorize(event.headers.Authorization);
   const logPayload = {};
   if (!token.valid && test === false) {
     if ('status' in token)

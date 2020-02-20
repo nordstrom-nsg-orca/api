@@ -6,29 +6,34 @@ const verifier = new Okta({
 const db = require('./db.js');
 const { Client } = require('pg');
 
-module.exports.verifyToken = async (token) => {
+module.exports.authorize = async (token) => {
   if (!token)
     return { valid: false, err: { userMessage: 'no auth' } };
 
   if (token.startsWith('Bearer ')) {
-    token = token.substr(7);
-    let jwt;
-    try {
-      jwt = await verifier.verifyAccessToken(token, 'https://nordstrom.oktapreview.com/nauth-oidc-service');
-
-      return {
-        valid: true,
-        jwt: jwt
-      };
-    } catch (err) {
-      return {
-        valid: false,
-        err: err
-      };
-    }
+    return verifyToken(token);
   } else if (token.startsWith('Basic '))
     return verifyUser(token);
 };
+
+async function verifyToken (token) {
+  token = token.substr(7);
+  let jwt;
+  try {
+    jwt = await verifier.verifyAccessToken(token, 'https://nordstrom.oktapreview.com/nauth-oidc-service');
+
+    return {
+      valid: true,
+      jwt: jwt
+    };
+  } catch (err) {
+    return {
+      valid: false,
+      err: err
+    };
+  }
+}
+
 
 async function verifyUser (creds) {
   if (!creds)
