@@ -21,8 +21,8 @@ exports.handler = async (event, context, callback, test = false) => {
     return respond(500, 'database connection error', headers);
   }
 
-  const groups = JSON.stringify(token.jwt.claims.groups_whitelist).replace(/"/g, "'");
-  const query = `SELECT * FROM orca.get_pages(Array${groups}::text[])`;
+  const groups = `'${token.jwt.claims.groups_whitelist.join('\',\'')}'`;
+  const query = `SELECT * FROM orca.group_permission WHERE name in (${groups})`;
 
   try {
     cursor = await client.query(query);
@@ -31,6 +31,27 @@ exports.handler = async (event, context, callback, test = false) => {
     return respond(400, 'query error', headers);
   }
 
+  const pages = {};
+  for (let i = 0; i < cursor.rows.length; i++) {
+    const r = cursor.rows[i];
+
+    if (!(r.url in pages)) {
+      // check for wildcard overlaps and remove them
+      if (r.url.includes('*')) {
+        for (const key in pages) {
+          if (key.search(r.url) > -1 && (r.write || !pages[key]))
+            delete pages[key];
+        }
+      }
+
+      pages[r.url] = r.write;
+    } else {
+      // url does exist and was read only, but now can write
+      if (!pages[r.url] && r.write)
+        pages[r.url] = r.write;
+    }
+  }
+
   await client.end();
-  return respond(200, cursor.rows[0].get_pages, headers);
+  return respond(200, pages, headers);
 };
