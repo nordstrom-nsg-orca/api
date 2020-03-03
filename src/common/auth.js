@@ -21,13 +21,14 @@ async function verifyToken (token) {
   let jwt;
   try {
     jwt = await verifier.verifyAccessToken(token, 'https://nordstrom.oktapreview.com/nauth-oidc-service');
-
+    // console.log(jwt);
     return {
       valid: true,
       jwt: jwt,
       username: jwt.claims.sub
     };
   } catch (err) {
+    // console.log(jwt);
     return {
       valid: false,
       err: err.name + ' ' + err.userMessage
