@@ -1,5 +1,4 @@
 'use strict';
-
 const db = require('../common/db.js');
 const corsHeaders = require('../common/headers.js');
 const { respond } = require('../common/respond.js');
@@ -20,9 +19,6 @@ exports.handler = async (event, context, callback, test = false) => {
     return respond(500, 'database connection error', headers);
   }
 
-  // const groups = `'${token.jwt.claims.groups_whitelist.join('\',\'')}'`;
-  // const query = `SELECT * FROM orca.group_permission WHERE name in (${groups})`;
-
   let name;
   let query;
   let pages;
@@ -39,7 +35,7 @@ exports.handler = async (event, context, callback, test = false) => {
 
   if ('jwt' in token) {
     name = `'${token.jwt.claims.groups_whitelist.join('\',\'')}'`;
-    query = `SELECT * FROM orca.group_page_permission_view WHERE group_id = (SELECT id FROM orca.group WHERE name IN (${name}))`;
+    query = `SELECT * FROM orca.group_page_permission_view WHERE group_id IN (SELECT id FROM orca.group WHERE name IN (${name}))`;
   } else {
     name = token.username;
     query = `SELECT * FROM orca.user_page_permission_view WHERE user_id = (SELECT id FROM orca.user WHERE username = '${name}')`;
@@ -52,7 +48,7 @@ exports.handler = async (event, context, callback, test = false) => {
     await client.end();
     return respond(400, 'query error', headers);
   }
-
+  console.log(permissions);
   const results = {};
   // builds out all pages
   for (let i = 0; i < pages.rows.length; i++) {
@@ -77,12 +73,13 @@ exports.handler = async (event, context, callback, test = false) => {
       };
     }
   }
-
   // builds out permission
   for (let i = 0; i < permissions.rows.length; i++) {
     const permission = permissions.rows[i];
     const tab = permission.tab;
     const url = permission.url;
+    if (results[tab].allowed)
+      continue;
     if (url.includes('*') && tab in results) {
       results[tab].allowed = permission.write;
       for (const page in results[tab].pages) {
@@ -98,31 +95,11 @@ exports.handler = async (event, context, callback, test = false) => {
         }
       }
     } else {
-      results[tab].pages[url.substring(1)].allowed = permission.write;
+      results[tab].allowed = true;
+      results[tab].pages[url.substring(1)].allowed = true;
       results[tab].pages[url.substring(1)].write = permission.write;
     }
   }
-
-  // const pages = {};
-  // for (let i = 0; i < cursor.rows.length; i++) {
-  //   const r = cursor.rows[i];
-  //
-  //   if (!(r.url in pages)) {
-  //     // check for wildcard overlaps and remove them
-  //     if (r.url.includes('*')) {
-  //       for (const key in pages) {
-  //         if (key.search(r.url) > -1 && (r.write || !pages[key]))
-  //           delete pages[key];
-  //       }
-  //     }
-  //
-  //     pages[r.url] = r.write;
-  //   } else {
-  //     // url does exist and was read only, but now can write
-  //     if (!pages[r.url] && r.write)
-  //       pages[r.url] = r.write;
-  //   }
-  // }
 
   await client.end();
   return respond(200, results, headers);
