@@ -48,7 +48,6 @@ exports.handler = async (event, context, callback, test = false) => {
     await client.end();
     return respond(400, 'query error', headers);
   }
-  console.log(permissions);
   const results = {};
   // builds out all pages
   for (let i = 0; i < pages.rows.length; i++) {
