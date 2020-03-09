@@ -72,12 +72,13 @@ exports.handler = async (event, context, callback, test = false) => {
       };
     }
   }
+  
   // builds out permission
   for (let i = 0; i < permissions.rows.length; i++) {
     const permission = permissions.rows[i];
     const tab = permission.tab;
     const url = permission.url;
-    if (results[tab].allowed)
+    if (tab in results && results[tab].allowed)
       continue;
     if (url.includes('*') && tab in results) {
       results[tab].allowed = permission.write;
