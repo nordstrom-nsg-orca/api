@@ -49,6 +49,7 @@ exports.handler = async (event, context, callback, test = false) => {
     return respond(400, 'query error', headers);
   }
   const results = {};
+
   // builds out all pages
   for (let i = 0; i < pages.rows.length; i++) {
     const page = pages.rows[i];
@@ -72,7 +73,7 @@ exports.handler = async (event, context, callback, test = false) => {
       };
     }
   }
-  
+
   // builds out permission
   for (let i = 0; i < permissions.rows.length; i++) {
     const permission = permissions.rows[i];
