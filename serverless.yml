@@ -1,4 +1,4 @@
-service: nsg-acl
+service: orca-api-v${self:custom.version}
 
 frameworkVersion: ">=1.1.0 <2.0.0"
 
@@ -28,28 +28,28 @@ functions:
     events:
       - http:
           method: GET
-          path: api/table/{table}
+          path: api/v${self:custom.version}/table/{table}
           cors: true
   create:
     handler: src/crud.handler
     events:
       - http:
           method: POST
-          path: api/table/{table}
+          path: api/v${self:custom.version}/table/{table}
           cors: true
   update:
     handler: src/crud.handler
     events:
       - http:
           method: PUT
-          path: api/table/{table}/{id}
+          path: api/v${self:custom.version}/table/{table}/{id}
           cors: true
   delete:
     handler: src/crud.handler
     events:
       - http:
           method: DELETE
-          path: api/table/{table}/{id}
+          path: api/v${self:custom.version}/table/{table}/{id}
           cors: true
   infoblox:
     handler: src/infoblox/infoblox.handler
@@ -57,24 +57,25 @@ functions:
     events:
       - http:
           method: GET
-          path: api/infoblox/{endpoint}
+          path: api/v${self:custom.version}/infoblox/{endpoint}
           cors: true
   login:
     handler: src/auth/login.handler
     events:
       - http:
           method: GET
-          path: api/auth/login
+          path: api/v${self:custom.version}/auth/login
           cors: true
   page:
     handler: src/auth/page.handler
     events:
       - http:
           method: GET
-          path: api/auth/page
+          path: api/v${self:custom.version}/auth/page
           cors: true
 
 custom:
+  version: 1
   TeamManagedPolicy: !ImportValue fff000-iam-${self:provider.stage}-nsgtoolbox-01-TeamManagedPolicy
   webpack:
     webpackConfig: webpack.config.js
@@ -90,7 +91,7 @@ resources:
           - - Ref: ApiGatewayRestApi
             - ".execute-api.${self:provider.region}.amazonaws.com"
       Export:
-        Name: ApiHostname
+        Name: ApiHostname-v{$self:custom.version}
 
 plugins:
   - serverless-webpack
