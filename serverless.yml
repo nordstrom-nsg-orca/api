@@ -91,7 +91,7 @@ resources:
           - - Ref: ApiGatewayRestApi
             - ".execute-api.${self:provider.region}.amazonaws.com"
       Export:
-        Name: ApiHostname-v{$self:custom.version}
+        Name: ApiHostname-v${self:custom.version}
 
 plugins:
   - serverless-webpack
